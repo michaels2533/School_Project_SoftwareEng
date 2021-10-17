@@ -23,17 +23,20 @@ def create_app(config_class = Config):
     app.template_folder = config_class.TEMPLATE_FOLDER
 
     db.init_app(app)
-    login.init_app(app)
-    moment.init_app(app)
+    #Functions bellow will break program
+    #Add login with init_app() then uncommit for it to not break
+
+    #login.init_app(app)
+    #moment.init_app(app)
     bootstrap.init_app(app)
 
-    from app.Controller.errors import errors_blueprint as errors
+    from app.Controller.errors import bp_errors as errors
     app.register_blueprint(errors)
 
-    from app.Controller.auth_routes import auth_blueprint as auth
+    from app.Controller.auth_routes import bp_auth_routes as auth
     app.register_blueprint(auth)
 
-    from app.Controller.routes import routes_blueprint as routes
+    from app.Controller.routes import bp_routes as routes
     app.register_blueprint(routes)
 
 

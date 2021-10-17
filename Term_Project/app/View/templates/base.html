@@ -1,0 +1,41 @@
+<html>
+    <head>
+       {% if title %}
+          <title>{{ title }} - Research </title>
+       {% else %}
+          <title> Welcome to WSU Research Openings </title>
+       {% endif %}
+       <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+       
+
+    </head>
+
+    <body>
+        <div class ="nav-container">
+        <table>
+            <tr>
+                <!-- Will be the main page for the job postings -->
+                <td><a href="{{ url_for('routes.index') }}" class = "button">Postings</a></td>
+                <!-- Add in if user == faculty, add _post.hmtl button -->
+                <td><a href = "###" class = "button"> Create Post </a></td>
+                <!-- Add in log in / log out if statement-->
+                <td><a href = "###" class = "button"> Login </a></td>
+                <td><a href = "###" class = "button"> Log Out </a></td>
+ 
+            </tr>
+        </table>
+        </div>
+        <div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class = "flash-container"> {{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% block content %} {% endblock %}
+        </div>
+
+    </body>
+</html>
