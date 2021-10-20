@@ -27,3 +27,11 @@ class User(db.Model, UserMixin):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True) #holds post id
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    title = db.Column(db.String(150)) #holds post title
+    body = db.Column(db.String(1500)) #holds post body
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow) #records timestamp of when post was made
+    username = db.Column(db.String(150)) #holds username

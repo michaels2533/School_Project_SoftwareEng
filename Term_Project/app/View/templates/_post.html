@@ -1,0 +1,18 @@
+<table class = "posttable" style = "width:100%" valign="top">
+    <tr> 
+        <!-- Post Title -->
+        <td colspan="3"><div class="posttitle"> {{post.title}} </div>
+        </td>
+    </tr>
+        <td width="80%" >
+            <div class="postmessage"> <!-- Need to edit CSS file to fix styling -->
+              <!-- post body -->
+              {{ post.body }}    
+           </div>
+           <div class="posttimestamp"> 
+              <!-- timestamp; display as local date/time , figure out styling later -->
+              Posted at: {{ post.timestamp }}
+           </div> 
+        </td> 
+    
+</table>

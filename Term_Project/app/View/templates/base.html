@@ -17,7 +17,7 @@
                 <!-- Will be the main page for the job postings -->
                 <td><a href="{{ url_for('routes.index') }}" class = "button">Postings</a></td>
                 <!-- Add in if user == faculty, add _post.hmtl button -->
-                <td><a href = "###" class = "button"> Create Post </a></td>
+                <td><a href = "{{ url_for('routes.createPost') }}" class = "button"> Create Post </a></td>
                 <!-- Add in log in / log out if statement-->
                 {% if current_user.is_anonymous %}
                     <td><a href = "{{ url_for('auth.login') }}" class = "button"> Login </a></td>

@@ -27,7 +27,7 @@ def create_app(config_class = Config):
     #Add login with init_app() then uncommit for it to not break
 
     login.init_app(app)
-    #moment.init_app(app)
+    moment.init_app(app)
     bootstrap.init_app(app)
 
     from app.Controller.errors import bp_errors as errors
