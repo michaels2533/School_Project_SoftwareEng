@@ -19,9 +19,13 @@
                 <!-- Add in if user == faculty, add _post.hmtl button -->
                 <td><a href = "###" class = "button"> Create Post </a></td>
                 <!-- Add in log in / log out if statement-->
-                <td><a href = "###" class = "button"> Login </a></td>
-                <td><a href = "###" class = "button"> Log Out </a></td>
- 
+                {% if current_user.is_anonymous %}
+                    <td><a href = "{{ url_for('auth.login') }}" class = "button"> Login </a></td>
+                {% else %}
+                    <td><a href = "{{ url_for('auth.logout') }}" class = "button"> Log Out </a></td>
+                {% endif %}
+            
+
             </tr>
         </table>
         </div>
