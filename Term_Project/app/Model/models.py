@@ -35,3 +35,13 @@ class Post(db.Model):
     body = db.Column(db.String(1500)) #holds post body
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow) #records timestamp of when post was made
     username = db.Column(db.String(150)) #holds username
+
+
+class Application(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    firstName = db.Column(db.String(26))
+    lastName = db.Column(db.String(26))
+    email = db.Column(db.String(120))
+    phoneNum = db.Column(db.String(20))
+    body = db.Column(db.String(1500))
+    
