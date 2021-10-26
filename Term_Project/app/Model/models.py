@@ -6,13 +6,14 @@ from app import db
 from flask_login import UserMixin
 from app import login
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True) #id of user
     username = db.Column(db.String(64), unique = True)
     email =  db.Column(db.String(120), unique = True)
     password_hash = db.Column(db.String(128))
     userType = db.Column(db.Text)
-    #posts = db.relationship('Post', backref='writer', lazy='dynamic')
+    posts = db.relationship('Post', backref='writer')
 
     def __repr__(self):
         return '<User {} - {} - {} - {};'.format(self.id, self.username, self.email, self.userType)
@@ -35,6 +36,7 @@ class Post(db.Model):
     body = db.Column(db.String(1500)) #holds post body
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow) #records timestamp of when post was made
     username = db.Column(db.String(150)) #holds username
+    applicants = db.relationship('Application', backref = 'jobPost')
 
 
 class Application(db.Model):
@@ -44,4 +46,4 @@ class Application(db.Model):
     email = db.Column(db.String(120))
     phoneNum = db.Column(db.String(20))
     body = db.Column(db.String(1500))
-    
+    post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
