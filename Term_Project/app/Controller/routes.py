@@ -8,6 +8,7 @@ from app import db
 from app.Controller.forms import PostForm, ApplicationForm
 from app.Model.models import Post, Application
 
+
 bp_routes = Blueprint('routes', __name__)
 bp_routes.template_folder = Config.TEMPLATE_FOLDER #'..\\View\\templates'
 
@@ -35,8 +36,10 @@ def createPost():
 def createApplication(post_id):
     aform = ApplicationForm()
     if aform.validate_on_submit():
+        cPost = Post.query.filter_by(id = post_id).first()
         #Create new application instance 
         newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, phoneNum = aform.phoneNum.data, body = aform.body.data)
+        newApplication.jobPost = cPost
         #Saves the Application to the database
         db.session.add(newApplication)
         db.session.commit()

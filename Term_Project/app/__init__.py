@@ -8,7 +8,7 @@ from config import Config
 
 
 db = SQLAlchemy()
-bootstrap = Bootstrap()
+#bootstrap = Bootstrap()
 
 login = LoginManager()
 login.login_view = 'auth.login'
@@ -28,7 +28,8 @@ def create_app(config_class = Config):
 
     login.init_app(app)
     moment.init_app(app)
-    bootstrap.init_app(app)
+    Bootstrap(app)
+    #bootstrap.init_app(app)
 
     from app.Controller.errors import bp_errors as errors
     app.register_blueprint(errors)
@@ -39,5 +40,6 @@ def create_app(config_class = Config):
     from app.Controller.routes import bp_routes as routes
     app.register_blueprint(routes)
 
+    
 
     return app
