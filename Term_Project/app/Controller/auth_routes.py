@@ -29,8 +29,8 @@ def register():
 
 @bp_auth.route('/login', methods = ['GET', 'POST'])
 def login():
-    # if current_user.is_authenticated:
-    #     return redirect(url_for('routes.index'))
+    if current_user.is_authenticated:
+         return redirect(url_for('routes.index'))
     lform = LoginForm()
     if lform.validate_on_submit():
         user = User.query.filter_by(username =lform.username.data).first()

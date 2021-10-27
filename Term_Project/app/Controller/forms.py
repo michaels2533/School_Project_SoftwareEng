@@ -1,12 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email
+from wtforms import StringField, SubmitField, SelectField, TextAreaField, PasswordField
+from wtforms.validators import ValidationError, DataRequired, Length, Email, EqualTo
+from flask_login import current_user
+
+from app.Model.models import User
 
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()]) #where the user types in the title
     body = TextAreaField('Body', validators = [DataRequired()]) #where the user types in the body
     submit = SubmitField('Post') #submit button
-
 
 class ApplicationForm(FlaskForm):
     firstName = StringField('First', validators=[DataRequired()])
@@ -15,3 +17,17 @@ class ApplicationForm(FlaskForm):
     phoneNum = StringField('Phone', validators = [DataRequired()])
     body = TextAreaField('Resume', validators = [DataRequired()])
     submit = SubmitField('Submit Application')
+
+class EditForm(FlaskForm):
+    firstname = StringField('First Name',validators=[DataRequired()])
+    lastname = StringField('Last Name',validators=[DataRequired()])
+    email = StringField('Email',validators=[DataRequired(), Email()])
+    password = PasswordField('Password',validators=[DataRequired()])
+    password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Submit')
+
+    def validate_email(self, email):
+        users = User.query.filter_by(email = email.data).all()
+        for user in users:
+            if (user.id != current_user.id):
+                raise ValidationError('The emial is already associated with another account! Please use a different email address.')

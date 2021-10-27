@@ -1,26 +1,34 @@
 <html>
     <head>
        {% if title %}
-          <title>{{ title }} - Research </title>
+          <title> {{ title }} - Research </title>
        {% else %}
           <title> Welcome to WSU Research Openings </title>
        {% endif %}
-       <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+       <link rel="stylesheet" href="{{ url_for('static', filename='css/css/main.css') }}">
 
     </head>
 
     <body>
         <div class ="nav-container">
         <table>
-            <tr>
+            <tr> 
                 <!-- Will be the main page for the job postings -->
                 <td><a href="{{ url_for('routes.index') }}" class = "button">Postings</a></td>
-                <!-- Add in if user == faculty, add _post.hmtl button -->
-                <td><a href = "{{ url_for('routes.createPost') }}" class = "button"> Create Post </a></td>
+                
                 <!-- Add in log in / log out if statement-->
                 {% if current_user.is_anonymous %}
                     <td><a href = "{{ url_for('auth.login') }}" class = "button"> Login </a></td>
                 {% else %}
+                    <!-- If user is logged in, user can display their profile -->
+                    <td><a href = "{{ url_for('routes.display_profile') }}" class = "button"> Profile </a></td>
+
+                    <!-- Will only display Create Post if Faculty ... may need to associate with user so you cannot type in browser /createPost-->
+                    {% if current_user.userType == "Faculty" %}
+                        <!-- Add in if user == faculty, add _post.hmtl button -->
+                        <td><a href = "{{ url_for('routes.createPost') }}" class = "button"> Create Post </a></td>
+                    {% endif %}
+
                     <td><a href = "{{ url_for('auth.logout') }}" class = "button"> Log Out </a></td>
                 {% endif %}
             
