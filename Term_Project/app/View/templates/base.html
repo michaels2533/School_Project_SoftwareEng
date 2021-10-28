@@ -35,8 +35,13 @@
                 
                 
             </tr>
+
         </table>
-        <div class = "username"> <p> Logged in as: {{current_user.username}} </p> </div>
+            {% if current_user.is_anonymous %}
+            
+            {% else %}
+                <div class = "username"> <p> Logged in as: {{current_user.username}} </p> </div>
+            {% endif %}
         </div>
         
         <div>
