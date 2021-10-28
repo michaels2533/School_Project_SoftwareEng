@@ -11,11 +11,11 @@
            </div>
            <div class="posttimestamp"> 
               <!-- timestamp; display as local date/time , figure out styling later -->
-              Posted at: {{ post.timestamp }}
+              Posted at: {{ post.timestamp }} 
            </div> 
-           <div>
-               <a href = "{{ url_for('routes.createApplication', post_id = post.id) }}" class = 'button'> Apply </a>
-           </div>
         </td> 
+        <td>
+            <a href = "{{ url_for('routes.createApplication', post_id = post.id) }}" class = 'applybutton'> Apply </a>
+        </td>
     
 </table>
