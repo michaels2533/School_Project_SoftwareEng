@@ -6,13 +6,6 @@
     <form action ="" method = "POST">
         {{form.hidden_tag()}}
 
-            <p> {{ form.username.label}}</p>
-            <p> {{ form.username(class ='textinput')}}</p>
-
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{error}}]</span>
-            {% endfor %}
-
             <p> {{ form.firstname.label}}</p>
             <p> {{ form.firstname(class ='textinput')}}</p>
 
@@ -46,14 +39,6 @@
             <p> {{ form.password2(class ='textinput')}}</p>
 
             {% for error in form.password2.errors %}
-            <span style="color: red;">[{{error}}]</span>
-            {% endfor %}
-
-            
-            <p> {{ form.userType.label}}</p>
-            <p> {{ form.userType(class ='item')}}</p>
-
-            {% for error in form.userType.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
