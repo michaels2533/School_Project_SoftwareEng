@@ -5,6 +5,7 @@ from sqlalchemy.orm import backref
 from app import db
 from flask_login import UserMixin
 from app import login
+from wtforms import DateField
 
 
 class User(db.Model, UserMixin):
@@ -35,10 +36,15 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True) #holds post id
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     title = db.Column(db.String(150)) #holds post title
-    body = db.Column(db.String(1500)) #holds post body
+    description = db.Column(db.String(1500)) #holds post body
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow) #records timestamp of when post was made
     username = db.Column(db.String(150)) #holds username
     applicants = db.relationship('Application', backref = 'jobPost')
+    startDate = db.Column(db.String(20)) # will hold start date for job
+    endDate = db.Column(db.String(20)) # will hold end date for job
+    requiredTime = db.Column(db.Text) # will hold required amount of time 
+    qualifications = db.Column(db.String(1500)) #will hold qualifications needed for the job
+    researchFields = db.Column(db.String(300))
 
 
 class Application(db.Model):

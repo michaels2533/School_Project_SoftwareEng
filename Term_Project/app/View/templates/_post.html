@@ -7,15 +7,35 @@
         <td width="80%" >
             <div class="postmessage"> <!-- Need to edit CSS file to fix styling -->
               <!-- post body -->
-              {{ post.body }}    
+              {{ post.description }}    
            </div>
-           <div class="posttimestamp"> 
-              <!-- timestamp; display as local date/time , figure out styling later -->
-              Posted at: {{ post.timestamp }} 
-           </div> 
+           <div class="postmessage"> <!-- Need to edit CSS file to fix styling -->
+            <!-- post will post job qualifications needed -->
+            {{ post.qualifications }}    
+         </div>
+         <div class="postmessage"> 
+            <!-- will post all researchFields job will look into researching -->
+            {{ post.researchFields }} 
+         </div>
+         <!-- Required Time -->
+         <div class="postmessage"> 
+            <!-- will post all researchFields job will look into researching -->
+            <b>Required Amount of Time: </b> {{ post.requiredTime }} 
+         </div>  
+         <!-- Start / End Date -->
+         <div class="datepicker"> 
+            <!-- will post all researchFields job will look into researching -->
+            <b>Start:</b> {{ post.start }}<b> End: </b>{{ post.end }} 
+         </div> 
+         <div class="posttimestamp"> 
+            <!-- timestamp; display as local date/time , figure out styling later -->
+            Posted at: {{ post.timestamp }} 
+         </div> 
         </td> 
+        {% if current_user.userType == "Student" %}
         <td>
             <a href = "{{ url_for('routes.createApplication', post_id = post.id) }}" class = 'applybutton'> Apply </a>
         </td>
+        {% endif %}
     
 </table>
