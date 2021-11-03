@@ -28,7 +28,8 @@ def index():
 def createPost():
     pform = PostForm()
     if pform.validate_on_submit():
-        newPost = Post(title = pform.title.data, body = pform.body.data)
+        newPost = Post(title = pform.title.data, description = pform.description.data, startDate = pform.start.data.strftime('%m/%d/%Y'), endDate = pform.end.data.strftime('%m/%d/%Y'), requiredTime = pform.requiredTime.data
+        , qualifications = pform.qualifications.data, researchFields = pform.researchFields.data )
         db.session.add(newPost)
         db.session.commit()
         flash('Your Research post has be created!')
