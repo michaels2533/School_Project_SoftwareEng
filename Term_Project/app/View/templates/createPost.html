@@ -31,31 +31,30 @@
     
             </div>
             <!-- start date -->
-            <div class="datepicker">
+            <div class="formbody">
                 <!-- Input for start date-->
-                {{ form.start.label }}<br>
-                {{ form.start(class="date") }}<br>
+                {{ form.start.label }} - mm/dd/yyyy<br>
+                {{ form.start(class="date") }} <br> 
                 
                 <!-- Errors for start date -->
                 {% for error in form.start.errors %}
                 <span style="color: red;"> Not Correct Date Format </span>
                 {% endfor %}
-                <p> Example - mm/dd/yyyy </p>
+               
             </div>
             <!-- end date -->
-            <div class="datepicker">
+            <div class="formbody">
                 <!-- Input for  end date-->
-                {{ form.end.label }}<br>
-                {{ form.end(class="date") }}<br>
+                {{ form.end.label }} - mm/dd/yyyy <br>
+                {{ form.end(class="date") }} <br> 
                 
                 <!-- Errors for  end date-->
                 {% for error in form.end.errors %}
                 <span style="color: red;"> Not Correct Date Format </span>
                 {% endfor %}
-                <p> Example - mm/dd/yyyy </p>
             </div>
             <!-- requiredTime -->
-            <div class="">
+            <div class="formbody">
                 <!-- Input for  -->
                 {{ form.requiredTime.label }}<br>
                 {{ form.requiredTime(class="date") }}<br>
@@ -80,15 +79,15 @@
             </div>
             <!-- research fields-->
             <div class="formtitle">
-                <!--Displays the form item for the post's research Fields.-->
+                <!-- Redirects to another page where you can add different research field tags -->
+                <td><a href="{{ url_for('routes.addTag') }}" class = ""> Add New Tag </a></td>
+                <!--Displays the form item for the post's research Fields.-->    
+                
+                <div class = "">
+                    <span style = "color: rgb(22, 21, 21);"> {{ form.researchFields }}</span> <!-- span element? -->
+                </div>
+            
 
-                {{ form.researchFields.label }}<br>
-                {{ form.researchFields(class="formtitle") }}<br>
-    
-                <!-- Errors for Title  -->
-                {% for error in form.researchFields.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
             </div>
 
             <br>

@@ -15,7 +15,12 @@
          </div>
          <div class="postmessage"> 
             <!-- will post all researchFields job will look into researching -->
-            {{ post.researchFields }} 
+            Research Fields
+            {% for tag in post.researchFields.all() %}
+                    <div class = "tagitem">
+                        <span style = "color: rgb(22, 21, 21);"> {{ tag.name }}</span> <!-- span element? -->
+                    </div>
+            {% endfor %}
          </div>
          <!-- Required Time -->
          <div class="postmessage"> 
@@ -23,9 +28,9 @@
             <b>Required Amount of Time: </b> {{ post.requiredTime }} 
          </div>  
          <!-- Start / End Date -->
-         <div class="datepicker"> 
+         <div class="postmessage"> 
             <!-- will post all researchFields job will look into researching -->
-            <b>Start:</b> {{ post.start }}<b> End: </b>{{ post.end }} 
+            <b>Start:</b> {{ post.startDate }}<b> End: </b>{{ post.endDate }} 
          </div> 
          <div class="posttimestamp"> 
             <!-- timestamp; display as local date/time , figure out styling later -->
