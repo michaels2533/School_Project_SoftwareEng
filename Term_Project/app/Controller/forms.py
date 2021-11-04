@@ -2,10 +2,18 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, PasswordField, DateField
 from wtforms.validators import ValidationError, DataRequired, Length, Email, EqualTo
 from flask_login import current_user
+from wtforms_sqlalchemy.fields import  QuerySelectMultipleField
+from wtforms.widgets import ListWidget, CheckboxInput
 
 from wtforms import widgets
 
-from app.Model.models import User
+from app.Model.models import User, Tag
+
+#write the query_factory and get_label functions here 
+def queryFactory():
+    return Tag.query.all()
+def getLabel(tagName):
+    return tagName.name
 
 class PostForm(FlaskForm):
     title = StringField('Project Title', validators=[DataRequired()]) #where the user types in the title
@@ -14,7 +22,7 @@ class PostForm(FlaskForm):
     end = DateField('End at', validators = [DataRequired()], format = "%m/%d/%Y")
     requiredTime = SelectField('Time Required', choices = [('5 Hours'), ('10 Hours'), ('15 Hours'), ('20 Hours'), ('25 Hours'), ('30 Hours'), ('35 Hours'), ('40 Hours')])
     qualifications = TextAreaField('Qualifications Needed', validators = [DataRequired()])
-    researchFields = StringField('Fields of Research')
+    researchFields = QuerySelectMultipleField( 'Tag', query_factory = queryFactory , get_label = getLabel , widget = ListWidget(prefix_label=False), option_widget=CheckboxInput() ) 
     submit = SubmitField('Post') #submit button
 
 class ApplicationForm(FlaskForm):
@@ -38,3 +46,7 @@ class EditForm(FlaskForm):
         for user in users:
             if (user.id != current_user.id):
                 raise ValidationError('The emial is already associated with another account! Please use a different email address.')
+
+class TagForm(FlaskForm):
+    newField = StringField('New Research Field')
+    submit = SubmitField('Add Tag')
