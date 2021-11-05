@@ -22,7 +22,7 @@ class PostForm(FlaskForm):
     end = DateField('End at', validators = [DataRequired()], format = "%m/%d/%Y")
     requiredTime = SelectField('Time Required', choices = [('5 Hours'), ('10 Hours'), ('15 Hours'), ('20 Hours'), ('25 Hours'), ('30 Hours'), ('35 Hours'), ('40 Hours')])
     qualifications = TextAreaField('Qualifications Needed', validators = [DataRequired()])
-    researchFields = QuerySelectMultipleField( 'Tag', query_factory = queryFactory , get_label = getLabel , widget = ListWidget(prefix_label=False), option_widget=CheckboxInput() ) 
+    researchFields = QuerySelectMultipleField( 'Research Fields', query_factory = queryFactory , get_label = getLabel , widget = ListWidget(prefix_label=False), option_widget=CheckboxInput() ) 
     submit = SubmitField('Post') #submit button
 
 class ApplicationForm(FlaskForm):

@@ -80,14 +80,13 @@
             <!-- research fields-->
             <div class="formtitle">
                 <!-- Redirects to another page where you can add different research field tags -->
-                <td><a href="{{ url_for('routes.addTag') }}" class = ""> Add New Tag </a></td>
+                <!-- Removed link, if we want to implement java script stuff to make the page more dynamic we would put it here-->
                 <!--Displays the form item for the post's research Fields.-->    
-                
+                {{form.researchFields.label}}
                 <div class = "">
                     <span style = "color: rgb(22, 21, 21);"> {{ form.researchFields }}</span> <!-- span element? -->
                 </div>
-            
-
+                If you wish to add Research Fields, you may do so in your Profile Page.
             </div>
 
             <br>
