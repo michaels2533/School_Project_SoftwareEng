@@ -22,8 +22,12 @@
                     <td><a href = "{{ url_for('auth.login') }}" class = "navbutton"> Login </a></td>
                 {% else %}
                     <!-- If user is logged in, user can display their profile -->
-                    <td><a href = "{{ url_for('routes.display_profile') }}" class = "navbutton"> Profile </a></td>
 
+                    <td><a href = "{{ url_for('routes.student_display_profile') }}" class = "navbutton"> Profile </a></td>
+                    {% if current_user.userType == "Student" %}
+                    
+                    {% endif %}
+                    
                     <!-- Will only display Create Post if Faculty ... may need to associate with user so you cannot type in browser /createPost-->
                     {% if current_user.userType == "Faculty" %}
                         <!-- Add in if user == faculty, add _post.hmtl button -->

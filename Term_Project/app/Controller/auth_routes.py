@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask import render_template, redirect, url_for, flash
 from flask_sqlalchemy import sqlalchemy
 from app.Controller.auth_forms import LoginForm, RegistrationForm
-from app.Model.models import User
+from app.Model.models import Faculty, Student, User
 from flask_login import current_user, login_user, logout_user, login_required
 from app.Controller.auth_forms import LoginForm, RegistrationForm
 
@@ -18,12 +18,23 @@ bp_auth.template_folder = Config.TEMPLATE_FOLDER
 def register():
     rform = RegistrationForm()
     if rform.validate_on_submit():
-        user = User(username = rform.username.data, email = rform.email.data, userType = rform.userType.data)
-        user.set_password(rform.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("Congrats, you are now registered!")
-        return redirect(url_for('routes.index'))
+        if rform.userType.data == "Student":
+            studentUser = Student(username = rform.username.data, email = rform.email.data)
+            studentUser.set_password(rform.password.data)
+            db.session.add(studentUser)
+            db.session.commit()
+            flash("Congrats, you are now registered!")
+            login_user(studentUser)
+            return redirect(url_for('routes.student_edit_profile'))
+
+        if rform.userType.data == "Faculty":
+            facultyUser = Faculty(username = rform.username.data, email = rform.email.data)
+            facultyUser.set_password(rform.password.data)
+            db.session.add(facultyUser)
+            db.session.commit()
+            flash("Congrats, you are now registered!")
+            return redirect(url_for('routes.index'))
+
     return render_template('register.html', form = rform)
 
 
@@ -38,6 +49,7 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
         login_user(user, remember = lform.remember_me.data)
+        
         return redirect(url_for('routes.index'))
     return render_template('login.html', title = 'Sign In', form = lform)
 

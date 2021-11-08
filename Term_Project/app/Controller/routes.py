@@ -1,11 +1,13 @@
 from __future__ import print_function
+import re
 import sys
+from threading import setprofile
 from flask import Blueprint
 from flask import render_template, redirect, url_for, request, flash
 from config import Config
 
 from app import db
-from app.Controller.forms import PostForm, ApplicationForm, EditForm
+from app.Controller.forms import PostForm, ApplicationForm, EditForm, StudentEditForm
 from app.Model.models import Post, Application
 
 from flask_login import current_user, login_required
@@ -16,7 +18,6 @@ bp_routes.template_folder = Config.TEMPLATE_FOLDER #'..\\View\\templates'
 
 @bp_routes.route("/", methods = ['GET'])
 @bp_routes.route("/index", methods = ['GET', 'POST'])
-# add @login_required here
 @login_required
 def index():
     posts = Post.query.order_by(Post.timestamp.desc())
@@ -54,28 +55,62 @@ def createApplication(post_id):
 @bp_routes.route('/display_profile', methods = ['GET'])
 @login_required
 def display_profile():
-    return render_template('displayProfile.html',title = 'Display Profile', student = current_user)
-
+    if current_user.userType == "Student":
+        return redirect(url_for('routes.student_display_profile'))
+    if current_user.userType == "Faculty":
+        return render_template('studentDisplayProfile.html',title = 'Display Profile', user = current_user)
+    return
+    
+@bp_routes.route('/student_display_profile', methods = ['GET'])
+@login_required
+def student_display_profile():
+    return render_template('studentDisplayProfile.html',title = 'Display Profile', student = current_user)
+    
 @bp_routes.route('/edit_profile', methods = ['GET', 'POST'])
 @login_required
 def edit_profile():
-    eform = EditForm()
+    if current_user.userType == "Student":  
+        return redirect(url_for('routes.student_edit_profile'))
+    if current_user.userType == "Faculty":
+        pass
+    else:
+        pass
+    return redirect(url_for('routes.display_profile'))
+
+@bp_routes.route('/student_edit_profile', methods = ['GET', 'POST'])
+@login_required
+def student_edit_profile():
+    sform = StudentEditForm()
     if request.method == 'POST':
-        #handle the form submission
-        if eform.validate_on_submit():
-            current_user.firstname = eform.firstname.data
-            current_user.lastname = eform.lastname.data
-            current_user.email = eform.email.data
-            current_user.set_password(eform.password.data)
+        #handle the form submission    
+            current_user.firstname = sform.firstname.data
+            current_user.lastname = sform.lastname.data
+            current_user.email = sform.email.data
+            current_user.major = sform.major.data
+            current_user.GPA = sform.GPA.data
+            current_user.gradDate = sform.gradDate.data
+            current_user.electives = sform.electives.data
+            current_user.researchTopics = sform.researchTopics.data
+            current_user.programLanguages = sform.programLanguages.data
+            current_user.experience = sform.experience.data
+            current_user.set_password(sform.password.data)
             db.session.add(current_user)
             db.session.commit()
             flash("Your changes have been saved!")
-            return redirect(url_for('routes.display_profile'))
+            return redirect(url_for('routes.student_display_profile'))
     elif request.method == 'GET':
         #populate the user data from DB
-        eform.firstname.data = current_user.firstname
-        eform.lastname.data = current_user.lastname
-        eform.email.data = current_user.email
+        sform.firstname.data = current_user.firstname
+        sform.lastname.data = current_user.lastname
+        sform.email.data = current_user.email
+        sform.major.data = current_user.major
+        sform.GPA.data = current_user.GPA
+        sform.gradDate.data = current_user.gradDate
+        sform.electives.data = current_user.electives
+        sform.researchTopics.data = current_user.researchTopics
+        sform.programLanguages.data = current_user.programLanguages
+        sform.experience.data = current_user.experience
+
     else:
         pass
-    return render_template('editProfile.html', title = 'Edit Profile', form = eform)
+    return render_template('studentEditProfile.html', title = 'Edit Profile', form = sform)

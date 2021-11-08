@@ -7,15 +7,25 @@ from flask_login import UserMixin
 from app import login
 
 
+eTags = db.Table('eTags', db.Column('student_id', db.Integer, db.ForeignKey('student.id')), db.Column('elective_id', db.Integer, db.ForeignKey('electiveTag.id')))
+
+
 class User(db.Model, UserMixin):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True) #id of user
     username = db.Column(db.String(64), unique = True)
     firstname = db.Column(db.String(64))
     lastname = db.Column(db.String(64))
     email =  db.Column(db.String(120), unique = True)
+    #WSU_ID = db.Column(db.String(64), unique = True)
     password_hash = db.Column(db.String(128))
-    userType = db.Column(db.Text)
+    userType = db.Column(db.String(64))
     posts = db.relationship('Post', backref='writer')
+
+    __mapper_args__ = {
+        'polymorphic_on':userType,
+        'polymorphic_identity':'user'
+    }
 
     def __repr__(self):
         return '<User {} - {} - {} - {};'.format(self.id, self.username, self.email, self.userType)
@@ -25,6 +35,43 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
    # def get_user_posts(self):
       #  return self.posts
+
+
+class Student(User):
+    __tablename__ = 'student'
+    major = db.Column(db.String(64))
+    GPA = db.Column(db.String(64))
+    gradDate = db.Column(db.String(64))
+    researchTopics = db.Column(db.String(64))
+    programLanguages = db.Column(db.String(64))
+    experience = db.Column(db.String(64))
+    #electives = db.Column(db.String(64))
+
+    electiveTag = db.relationship("ElectiveTag", secondary = eTags, primaryjoin=(eTags.c.student_id == id), backref=db.backref('eTags', lazy='dynamic'), lazy='dynamic')
+
+    # def get_electiveTags(self):
+    #     return self.electiveTag
+
+    __mapper_args__ = {
+        'polymorphic_identity':'student'
+    }
+
+
+class ElectiveTag(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(50))
+    
+    def __repr__(self):
+        return 'ID - {} Name - {};'.format(self.id, self.name)
+
+
+class Faculty(User):
+    __tablename__ = 'faculty'
+    officeHours = db.Column(db.String(64))
+    __mapper_args__ = {
+        'polymorphic_identity':'faculty'
+    }
+
 
 
 @login.user_loader
@@ -49,3 +96,5 @@ class Application(db.Model):
     phoneNum = db.Column(db.String(20))
     body = db.Column(db.String(1500))
     post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
+
+
