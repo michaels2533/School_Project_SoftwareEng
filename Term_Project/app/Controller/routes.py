@@ -5,8 +5,8 @@ from flask import render_template, redirect, url_for, request, flash
 from config import Config
 
 from app import db
-from app.Controller.forms import PostForm, ApplicationForm, EditForm
-from app.Model.models import Post, Application
+from app.Controller.forms import PostForm, ApplicationForm, EditForm, TagForm
+from app.Model.models import Post, Application, Tag
 
 from flask_login import current_user, login_required
 
@@ -27,13 +27,17 @@ def index():
 @login_required
 def createPost():
     pform = PostForm()
+    posts = Post.query.order_by(Post.timestamp.desc())
     if pform.validate_on_submit():
-        newPost = Post(title = pform.title.data, body = pform.body.data)
+        newPost = Post(title = pform.title.data, description = pform.description.data, startDate = pform.start.data, endDate = pform.end.data, requiredTime = pform.requiredTime.data
+        , qualifications = pform.qualifications.data)
+        for t in pform.researchFields.data:
+            newPost.researchFields.append(t)
         db.session.add(newPost)
         db.session.commit()
         flash('Your Research post has be created!')
         return redirect(url_for('routes.index'))
-    return render_template('createPost.html', form = pform)
+    return render_template('createPost.html', form = pform, posts=posts.all())
 
 @bp_routes.route("/createApplication/<post_id>", methods = ['GET', 'POST'])
 @login_required
@@ -50,6 +54,26 @@ def createApplication(post_id):
         flash('Your Application has be submitted!')
         return redirect(url_for('routes.index'))
     return render_template('_createApplication.html', form = aform)
+
+@bp_routes.route('/addTag', methods = ['GET', 'POST'])
+@login_required
+def addTag():
+    addTag = TagForm()
+    allTags = Tag.query.all()
+    if addTag.validate_on_submit():
+        addTag = Tag(name = addTag.newField.data)
+        if allTags == []:
+            db.session.add(addTag)
+            db.session.commit()
+        for t in allTags:
+            if addTag.name == t.name:
+                flash('Already a Research Tag')
+                break     
+            else:
+                db.session.add(addTag)
+                db.session.commit()
+        return redirect(url_for('routes.display_profile'))
+    return render_template('createtag.html', form = addTag)
 
 @bp_routes.route('/display_profile', methods = ['GET'])
 @login_required
