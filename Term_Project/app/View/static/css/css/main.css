@@ -1,5 +1,5 @@
 
-/*
+
 
 .username{
     position: relative; left: 7px; top: 45px;
@@ -188,9 +188,7 @@ body {
   
 }
 
-<<<<<<< HEAD
-*/
-=======
+
 .tagitem {
     display: inline-block;
     position: relative;
@@ -201,4 +199,3 @@ body {
     padding: 3px;
     width: 100px;  
 }
->>>>>>> iteration1
