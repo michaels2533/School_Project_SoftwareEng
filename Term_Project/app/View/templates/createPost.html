@@ -21,15 +21,74 @@
             </div>
             <div class="formbody">
                 <!-- Input for body -->
-                {{ form.body.label }}<br>
-                {{ form.body(class="formbody") }}<br>
+                {{ form.description.label }}<br>
+                {{ form.description(class="formbody") }}<br>
     
                 <!-- Errors for body -->
-                {% for error in form.body.errors %}
+                {% for error in form.description.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
     
             </div>
+            <!-- start date -->
+            <div class="formbody">
+                <!-- Input for start date-->
+                {{ form.start.label }} - mm/dd/yyyy<br>
+                {{ form.start(class="date") }} <br> 
+                
+                <!-- Errors for start date -->
+                {% for error in form.start.errors %}
+                <span style="color: red;"> Not Correct Date Format </span>
+                {% endfor %}
+               
+            </div>
+            <!-- end date -->
+            <div class="formbody">
+                <!-- Input for  end date-->
+                {{ form.end.label }} - mm/dd/yyyy <br>
+                {{ form.end(class="date") }} <br> 
+                
+                <!-- Errors for  end date-->
+                {% for error in form.end.errors %}
+                <span style="color: red;"> Not Correct Date Format </span>
+                {% endfor %}
+            </div>
+            <!-- requiredTime -->
+            <div class="formbody">
+                <!-- Input for  -->
+                {{ form.requiredTime.label }}<br>
+                {{ form.requiredTime(class="date") }}<br>
+    
+                <!-- Errors for  -->
+                {% for error in form.requiredTime.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+    
+            </div>
+            <!-- qualifications -->
+            <div class="formbody">
+                <!-- Input for body -->
+                {{ form.qualifications.label }}<br>
+                {{ form.qualifications(class="formbody") }}<br>
+    
+                <!-- Errors for body -->
+                {% for error in form.qualifications.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+    
+            </div>
+            <!-- research fields-->
+            <div class="formtitle">
+                <!-- Redirects to another page where you can add different research field tags -->
+                <!-- Removed link, if we want to implement java script stuff to make the page more dynamic we would put it here-->
+                <!--Displays the form item for the post's research Fields.-->    
+                {{form.researchFields.label}}
+                <div class = "">
+                    <span style = "color: rgb(22, 21, 21);"> {{ form.researchFields }}</span> <!-- span element? -->
+                </div>
+                If you wish to add Research Fields, you may do so in your Profile Page.
+            </div>
+
             <br>
             {{ form.submit(class="createbutton") }}
         </div>
