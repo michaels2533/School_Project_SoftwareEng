@@ -188,7 +188,10 @@ body {
   
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> iteration1
 .tagitem {
     display: inline-block;
     position: relative;
@@ -198,4 +201,8 @@ body {
     margin: 5px auto;
     padding: 3px;
     width: 100px;  
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> iteration1
