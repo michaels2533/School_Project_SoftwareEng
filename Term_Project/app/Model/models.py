@@ -7,7 +7,6 @@ from flask_login import UserMixin
 from app import login
 
 
-eTags = db.Table('eTags', db.Column('student_id', db.Integer, db.ForeignKey('student.id')), db.Column('elective_id', db.Integer, db.ForeignKey('electiveTag.id')))
 
 
 class User(db.Model, UserMixin):
@@ -36,6 +35,7 @@ class User(db.Model, UserMixin):
    # def get_user_posts(self):
       #  return self.posts
 
+eTags = db.Table('eTags', db.Column('student_id', db.Integer, db.ForeignKey('student.id')), db.Column('elective_id', db.Integer, db.ForeignKey('electivetag.id')))
 
 class Student(User):
     __tablename__ = 'student'
@@ -47,7 +47,7 @@ class Student(User):
     experience = db.Column(db.String(64))
     #electives = db.Column(db.String(64))
 
-    electiveTag = db.relationship("ElectiveTag", secondary = eTags, primaryjoin=(eTags.c.student_id == id), backref=db.backref('eTags', lazy='dynamic'), lazy='dynamic')
+    elective_tag = db.relationship("ElectiveTag", secondary = eTags, primaryjoin=(eTags.c.student_id == id), backref=db.backref('estudent', lazy='dynamic'), lazy='dynamic')
 
     # def get_electiveTags(self):
     #     return self.electiveTag
@@ -58,6 +58,7 @@ class Student(User):
 
 
 class ElectiveTag(db.Model):
+    __tablename__ = 'electivetag'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50))
     
