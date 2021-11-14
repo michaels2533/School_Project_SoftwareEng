@@ -1,5 +1,5 @@
 from app import create_app,db
-from app.Model.models import ElectiveTag, User
+from app.Model.models import ElectiveTag, ResearchTopicTag, User, ProgramLanguageTag
 
 app = create_app()
 
@@ -10,10 +10,23 @@ def make_shell_context():
 @app.before_first_request
 def initDB(*args, **kwargs):
     db.create_all()
+
     if ElectiveTag.query.count() == 0:
         eTag = ['AI', 'Machine Learning', 'Neural Networks', 'Database Systems', 'Security']
         for e in eTag:
             db.session.add(ElectiveTag(name = e))
+        db.session.commit()
+
+    if ProgramLanguageTag.query.count() == 0:
+        pTag = ['Python', 'C/C++', 'C#','Java', 'JavaScript', 'Golang']
+        for p in pTag:
+            db.session.add(ProgramLanguageTag(name = p))
+        db.session.commit()
+
+    if ResearchTopicTag.query.count() == 0:
+        rTag =  ['AI', 'Machine Learning', 'Neural Networks', 'Database Systems', 'Security']
+        for r in rTag:
+            db.session.add(ResearchTopicTag(name = r))
         db.session.commit()
 
 if __name__ == "__main__":
