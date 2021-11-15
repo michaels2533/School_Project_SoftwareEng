@@ -53,10 +53,4 @@ class StudentEditForm(EditForm):
     experience = StringField('Prior Research Experience', validators=[DataRequired()])
 
 class FacultyEditForm(EditForm):
-    pass
-    
-    def validate_email(self, email):
-        users = User.query.filter_by(email = email.data).all()
-        for user in users:
-            if (user.id != current_user.id):
-                raise ValidationError('The emial is already associated with another account! Please use a different email address.')
+    officehours = StringField('Office Hours', validators=[DataRequired()])

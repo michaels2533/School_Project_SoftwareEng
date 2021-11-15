@@ -33,7 +33,8 @@ def register():
             db.session.add(facultyUser)
             db.session.commit()
             flash("Congrats, you are now registered!")
-            return redirect(url_for('routes.index'))
+            login_user(facultyUser)
+            return redirect(url_for('routes.faculty_edit_profile'))
 
     return render_template('register.html', form = rform)
 

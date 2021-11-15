@@ -50,7 +50,7 @@ class User(db.Model, UserMixin):
 
 
 class Student(User):
-    __tablename__ = 'student'
+    __tablename__ = 'Student'
     id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     major = db.Column(db.String(64))
     GPA = db.Column(db.String(64))
@@ -75,17 +75,17 @@ class Student(User):
         return self.researchtopic_tag
 
     __mapper_args__ = {
-        'polymorphic_identity':'student'
+        'polymorphic_identity':'Student'
     }
 
 
 
 class Faculty(User):
-    __tablename__ = 'faculty'
+    __tablename__ = 'Faculty'
     id = db.Column(db.ForeignKey('user.id'), primary_key=True)
-    officeHours = db.Column(db.String(64))
+    officehours = db.Column(db.String(64))
     __mapper_args__ = {
-        'polymorphic_identity':'faculty'
+        'polymorphic_identity':'Faculty'
     }
 
 

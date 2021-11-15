@@ -4,10 +4,11 @@ import sys
 from threading import setprofile
 from flask import Blueprint
 from flask import render_template, redirect, url_for, request, flash
+from flask_wtf.form import FlaskForm
 from config import Config
 
 from app import db
-from app.Controller.forms import PostForm, ApplicationForm, EditForm, StudentEditForm
+from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm
 from app.Model.models import Post, Application
 
 from flask_login import current_user, login_required
@@ -58,7 +59,7 @@ def display_profile():
     if current_user.userType == "Student":
         return redirect(url_for('routes.student_display_profile'))
     if current_user.userType == "Faculty":
-        return render_template('studentDisplayProfile.html',title = 'Display Profile', user = current_user)
+        return redirect(url_for('routes.faculty_display_profile'))
     return
     
 @bp_routes.route('/student_display_profile', methods = ['GET'])
@@ -66,18 +67,44 @@ def display_profile():
 def student_display_profile():
     return render_template('studentDisplayProfile.html',title = 'Display Profile', student = current_user)
 
-
+@bp_routes.route('/faculty_display_profile', methods = ['GET'])
+@login_required
+def faculty_display_profile():
+    return render_template('facultyDisplayProfile.html',title = 'Display Profile', faculty = current_user)
     
 @bp_routes.route('/edit_profile', methods = ['GET', 'POST'])
 @login_required
 def edit_profile():
-    if current_user.userType == "Student":  
+    if current_user.userType == "student":  
         return redirect(url_for('routes.student_edit_profile'))
-    if current_user.userType == "Faculty":
-        pass
-    else:
-        pass
+    if current_user.userType == "faculty":
+        return redirect(url_for('routes.faculty_edit_profile'))
+
     return redirect(url_for('routes.display_profile'))
+
+@bp_routes.route('/faculty_edit_profile', methods = ['GET', 'POST'])
+@login_required
+def faculty_edit_profile():
+    fform = FacultyEditForm()
+    if request.method == 'POST':
+        #handle the form submission    
+            current_user.firstname = fform.firstname.data
+            current_user.lastname = fform.lastname.data
+            current_user.email = fform.email.data
+            current_user.officehours = fform.officehours.data
+            current_user.set_password(fform.password.data)
+            db.session.add(current_user)
+            db.session.commit()
+            flash("Your changes have been saved!")
+            return redirect(url_for('routes.faculty_display_profile'))
+    elif request.method == 'GET':
+        #populate the user data from DB
+        fform.firstname.data = current_user.firstname
+        fform.lastname.data = current_user.lastname
+        fform.email.data = current_user.email
+        fform.officehours.data = current_user.officehours
+        
+    return render_template('facultyEditProfile.html', title = 'Edit Profile', form = fform)      
 
 @bp_routes.route('/student_edit_profile', methods = ['GET', 'POST'])
 @login_required
