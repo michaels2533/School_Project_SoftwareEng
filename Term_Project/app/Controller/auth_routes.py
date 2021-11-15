@@ -18,12 +18,15 @@ bp_auth.template_folder = Config.TEMPLATE_FOLDER
 def register():
     rform = RegistrationForm()
     if rform.validate_on_submit():
-        user = User(username = rform.username.data, email = rform.email.data, userType = rform.userType.data)
-        user.set_password(rform.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("Congrats, you are now registered!")
-        return redirect(url_for('routes.index'))
+        if(User.query.filter_by(email = rform.email.data).count() < 1):
+            user = User(username = rform.username.data, firstname = rform.firstname.data, lastname = rform.lastname.data , email = rform.email.data, userType = rform.userType.data)
+            user.set_password(rform.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash("Congrats, you are now registered!")
+            return redirect(url_for('routes.index'))
+        else:
+            flash('The email address you selected is already in use')
     return render_template('register.html', form = rform)
 
 
@@ -33,7 +36,7 @@ def login():
          return redirect(url_for('routes.index'))
     lform = LoginForm()
     if lform.validate_on_submit():
-        user = User.query.filter_by(username =lform.username.data).first()
+        user = User.query.filter_by(email =lform.username.data).first()
         if (user is None) or (user.get_password(lform.password.data) == False):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))

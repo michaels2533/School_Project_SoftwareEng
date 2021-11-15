@@ -1,3 +1,5 @@
+
+/*
 .username{
     position: relative; left: 7px; top: 45px;
 }
@@ -123,50 +125,12 @@
     margin-top: 0px;
 }
 
-.postboy {
-border-bottom-color: rgb(212, 210, 208);
-border-bottom-style: solid;
-border-bottom-width: 1px;
-border-image-repeat: stretch;
-border-left-color: rgb(212, 210, 208);
-border-left-style: solid;
-border-left-width: 1px;
-border-right-color: rgb(212, 210, 208);
-border-right-style: solid;
-border-right-width: 1px;
-border-top-color: rgb(212, 210, 208);
-border-top-left-radius: 8px;
-border-top-right-radius: 8px;
-border-top-style: solid;
-border-top-width: 1px;
-box-shadow: none;
-cursor: pointer;
-display: block;
-font-family :"Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-font-style: normal;
-height: 240px;
-line-height: 17px;
-margin-bottom: 12px;
-margin-top: 1px;
-position: relative;
-width: 410px;
-margin-left: 5px;
-margin-right: 5px;
-}
-
-
 .formselect {
     width: 50%;
     height: 60px;
     font-style: Georgia;
     margin: 10;
     padding: 3px;
-}
-
-.postlist {
-    display: flex;
-    flex-wrap: wrap;
 }
 
 .post-box {
@@ -195,3 +159,90 @@ body {
     padding: 3px;
     width: 100px;  
 }
+
+*/
+
+.posttable { 
+    width : 100%;
+    margin: 0px;
+}
+
+.posttitle {
+    text-align: center;
+    font-weight: bold;
+    padding : 3px;    
+    font-style: Georgia;
+}
+
+.postmessage {
+    padding : 3px;    
+    font-style: Georgia;
+    width: 330px;
+    padding-top: 5px;
+    border-width: 1px;
+    word-wrap: break-word;
+    margin-left: 5px;
+}
+
+.posttimestamp {
+    padding : 3px;    
+    font-style: Georgia;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 0px;
+}
+
+
+.formselect {
+    width: 50%;
+    height: 60px;
+    font-style: Georgia;
+    margin: 10;
+    padding: 3px;
+}
+
+.post-box {
+    display: flex;
+    vertical-align: middle;
+    background-color: rgb(207, 203, 203);
+    margin: 10px;
+    padding: 1px;      
+}
+
+
+.postlist {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.postboy {
+    border-bottom-color: rgb(212, 210, 208);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-repeat: stretch;
+    border-left-color: rgb(212, 210, 208);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgb(212, 210, 208);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgb(212, 210, 208);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: none;
+    cursor: pointer;
+    display: block;
+    font-family :"Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    height: 240px;
+    line-height: 17px;
+    margin-bottom: 12px;
+    margin-top: 1px;
+    position: relative;
+    width: 410px;
+    margin-left: 5px;
+    margin-right: 5px;
+    }

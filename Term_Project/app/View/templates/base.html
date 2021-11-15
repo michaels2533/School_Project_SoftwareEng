@@ -5,50 +5,75 @@
         {% else %}
            <title> Welcome to WSU Research Openings </title>
         {% endif %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/css/main.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/css/main.css') }}"> 
  
      </head>
 
     <body>
-        <div class ="nav-container">
-        <table>
-            <tr> 
-                <!-- Can add LOGO here? <td><img src = "{{ url_for('static', filename = 'img//Logo.png' )}}" class = img></td>-->
-                <!-- Will be the main page for the job postings -->
-                <td><a href="{{ url_for('routes.index') }}" class = "navbutton">Postings</a></td>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="container-fluid">  
+                {% if current_user.is_anonymous %}
+                <a class="navbar-brand" href="{{ url_for('auth.login') }}">
+
+                {% else %}
+                <a class="navbar-brand" href="{{ url_for('routes.index') }}">
+
+                {% endif %}
+                <img src="{{ url_for('static', filename='img/331-3317404_about-this-page-washington-state-university-mascot.png') }}" alt="" width="55" height="50" class="d-inline-block align-text-top">
                 
+              </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!-- Will be the main page for the job postings -->
+                {% if current_user.is_anonymous %}
+                
+                {% else %}
+                <li class="nav-item mx-3">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('routes.index') }}">Find Positions</a>
+                </li>
+                {% endif %}
                 <!-- Add in log in / log out if statement-->
                 {% if current_user.is_anonymous %}
-                    <td><a href = "{{ url_for('auth.login') }}" class = "navbutton"> Login </a></td>
+                    <li class="nav-item  mx-2">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">Log in</a>
+                    </li>
                 {% else %}
                     <!-- If user is logged in, user can display their profile -->
-                    <td><a href = "{{ url_for('routes.display_profile') }}" class = "navbutton"> Profile </a></td>
+                        <li class="nav-item  mx-2">
+                            <a class="nav-link" href="{{ url_for('routes.display_profile') }}">Profile</a>
+                        </li>
 
                     <!-- Will only display Create Post if Faculty ... may need to associate with user so you cannot type in browser /createPost-->
                     {% if current_user.userType == "Faculty" %}
                         <!-- Add in if user == faculty, add _post.hmtl button -->
-                        <td><a href = "{{ url_for('routes.createPost') }}" class = "navbutton"> Create Post </a></td>
+                        <li class="nav-item  mx-2">
+                            <a class="nav-link" href="{{ url_for('routes.createPost') }}">Create Post</a>
+                          </li>
                     {% endif %}
-
-                    <td><a href = "{{ url_for('auth.logout') }}" class = "navbutton"> Log Out </a></td>
+                        <li class="nav-item  mx-2">
+                            <a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a>
+                            </li>
+                    </ul>
                 {% endif %}
-                
-                
-            </tr>
-
-        </table>
-            {% if current_user.is_anonymous %}
+                {% if current_user.is_anonymous %}
             
-            {% else %}
-                <div class = "username"> <p> Logged in as: {{current_user.username}} </p> </div>
-            {% endif %}
-        </div>
-        
+                {% else %}
+                    <span class= "navbar-text">
+                        Logged in as: {{current_user.username}}
+                    </span>
+                {% endif %}
+              </div>
+            </div>
+          </nav>
         <div>
             {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                <div class = "flash-container"> {{ message }}</div>
+                <div class = "alert alert-success"> {{ message }}</div>
                 {% endfor %}
             {% endif %}
             {% endwith %}

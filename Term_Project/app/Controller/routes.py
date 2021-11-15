@@ -100,6 +100,5 @@ def edit_profile():
         eform.firstname.data = current_user.firstname
         eform.lastname.data = current_user.lastname
         eform.email.data = current_user.email
-    else:
-        pass
+    
     return render_template('editProfile.html', title = 'Edit Profile', form = eform)
