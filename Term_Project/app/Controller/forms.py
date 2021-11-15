@@ -4,7 +4,9 @@ from wtforms.validators import ValidationError, DataRequired, Length, Email, Equ
 from flask_login import current_user
 from wtforms_sqlalchemy.fields import  QuerySelectMultipleField
 from wtforms.widgets import ListWidget, CheckboxInput
-
+from wtforms.widgets.core import CheckboxInput, ListWidget
+from app.Model.models import Faculty, ProgramLanguageTag, ResearchTopicTag, User, ElectiveTag
+from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 from wtforms import widgets
 
 from app.Model.models import User, Tag
@@ -14,6 +16,22 @@ def queryFactory():
     return Tag.query.all()
 def getLabel(tagName):
     return tagName.name
+
+
+def queryFactoryElectiveTag():
+    return ElectiveTag.query.all()
+def getLabelElective(tagname):
+    return tagname.name
+
+def queryFactoryProgramLanguageTag():
+    return ProgramLanguageTag.query.all()
+def getLabelProgramLanguage(tagname):
+    return tagname.name
+
+def queryFactoryResearchTopicTag():
+    return ResearchTopicTag.query.all()
+def getLabelResearchTopic(tagname):
+    return tagname.name
 
 class PostForm(FlaskForm):
     title = StringField('Project Title', validators=[DataRequired()]) #where the user types in the title
@@ -50,3 +68,15 @@ class EditForm(FlaskForm):
 class TagForm(FlaskForm):
     newField = StringField('New Research Field')
     submit = SubmitField('Add Tag')
+class StudentEditForm(EditForm):
+    major = StringField('Major', validators=[DataRequired()])
+    GPA = StringField('GPA', validators=[DataRequired()])
+    gradDate = StringField('Graduation Date', validators=[DataRequired()])
+    #electives = StringField('Technical Electives', validators=[DataRequired()])
+    electives = QuerySelectMultipleField('Technical Electives', query_factory = queryFactoryElectiveTag, get_label = getLabelElective, widget =  ListWidget(prefix_label=False), option_widget =  CheckboxInput())
+    researchTopics = QuerySelectMultipleField('Research Topics', query_factory = queryFactoryResearchTopicTag, get_label = getLabelResearchTopic, widget =  ListWidget(prefix_label=False), option_widget =  CheckboxInput())
+    programLanguages = QuerySelectMultipleField('Programming Languages', query_factory = queryFactoryProgramLanguageTag, get_label = getLabelProgramLanguage, widget =  ListWidget(prefix_label=False), option_widget =  CheckboxInput())
+    experience = StringField('Prior Research Experience', validators=[DataRequired()])
+
+class FacultyEditForm(EditForm):
+    officehours = StringField('Office Hours', validators=[DataRequired()])
