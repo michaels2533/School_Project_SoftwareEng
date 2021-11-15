@@ -24,7 +24,7 @@
                     <!-- If user is logged in, user can display their profile -->
 
                     
-                    {% if current_user.userType == "Student" %}
+                    {% if current_user.userType == "student" %}
                         <td><a href = "{{ url_for('routes.student_display_profile') }}" class = "navbutton"> Profile </a></td>
                     {% endif %}
                     

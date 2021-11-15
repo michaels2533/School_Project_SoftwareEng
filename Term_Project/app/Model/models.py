@@ -50,7 +50,7 @@ class User(db.Model, UserMixin):
 
 
 class Student(User):
-    __tablename__ = 'Student'
+    __tablename__ = 'student'
     id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     major = db.Column(db.String(64))
     GPA = db.Column(db.String(64))
@@ -75,7 +75,7 @@ class Student(User):
         return self.researchtopic_tag
 
     __mapper_args__ = {
-        'polymorphic_identity':'Student'
+        'polymorphic_identity':'student'
     }
 
 
