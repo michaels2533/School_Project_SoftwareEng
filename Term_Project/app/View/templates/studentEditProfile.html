@@ -28,10 +28,6 @@
             {% endfor %}
 
 
-
-
-
-
             <p> {{ form.major.label}}</p>
             <p> {{ form.major(class ='textinput')}}</p>
 
@@ -72,10 +68,16 @@
             {% endfor %}
 
 
-            <p> {{ form.electives.label}}</p>
+            <!-- <p> {{ form.electives.label}}</p>
             <p> {{ form.electives(class ='textinput')}}</p>
 
             {% for error in form.electives.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %} -->
+            <p> {{form.electives.label}} </p>
+            <p> {{form.electives}} </p>
+                      
+            {% for error in form.programLanguages.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 

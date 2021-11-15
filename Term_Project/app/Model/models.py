@@ -7,6 +7,19 @@ from flask_login import UserMixin
 from app import login
 
 
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
+eTags = db.Table('eTags', 
+                db.Column('student_id', db.Integer, db.ForeignKey('student.id')), 
+                db.Column('elective_id', db.Integer, db.ForeignKey('electivetag.id')))
+pTags = db.Table('pTags', 
+                db.Column('student_id', db.Integer, db.ForeignKey('student.id')), 
+                db.Column('programlanguage_id', db.Integer, db.ForeignKey('programlanguagetag.id')))
+rTags = db.Table('rTags', 
+                db.Column('student_id', db.Integer, db.ForeignKey('student.id')), 
+                db.Column('researchtopic_id', db.Integer, db.ForeignKey('researchtopictag.id')))
 
 
 class User(db.Model, UserMixin):
@@ -22,8 +35,8 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='writer')
 
     __mapper_args__ = {
-        'polymorphic_on':userType,
-        'polymorphic_identity':'user'
+        'polymorphic_identity':'user',
+        'polymorphic_on':userType
     }
 
     def __repr__(self):
@@ -39,21 +52,41 @@ eTags = db.Table('eTags', db.Column('student_id', db.Integer, db.ForeignKey('stu
 
 class Student(User):
     __tablename__ = 'student'
+    id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     major = db.Column(db.String(64))
     GPA = db.Column(db.String(64))
     gradDate = db.Column(db.String(64))
-    researchTopics = db.Column(db.String(64))
-    programLanguages = db.Column(db.String(64))
+    #researchTopics = db.Column(db.String(64))
+    #programLanguages = db.Column(db.String(64))
     experience = db.Column(db.String(64))
     #electives = db.Column(db.String(64))
 
-    elective_tag = db.relationship("ElectiveTag", secondary = eTags, primaryjoin=(eTags.c.student_id == id), backref=db.backref('estudent', lazy='dynamic'), lazy='dynamic')
+    elective_tag = db.relationship("ElectiveTag", secondary = eTags, primaryjoin=(eTags.c.student_id == id), 
+                                                  backref=db.backref('estudent', lazy='dynamic'), lazy='dynamic')
+    programlangauge_tag = db.relationship("ProgramLanguageTag", secondary = pTags, primaryjoin=(pTags.c.student_id == id), 
+                                                  backref=db.backref('pstudent', lazy='dynamic'), lazy='dynamic')
+    researchtopic_tag = db.relationship("ResearchTopicTag", secondary = rTags, primaryjoin=(rTags.c.student_id == id), 
+                                                  backref=db.backref('rstudent', lazy='dynamic'), lazy='dynamic')
 
-    # def get_electiveTags(self):
-    #     return self.electiveTag
+    def get_electiveTags(self):
+        return self.elective_tag
+    def get_programlanguageTags(self):
+        return self.programlangauge_tag
+    def get_researchtopicTags(self):
+        return self.researchtopic_tag
 
     __mapper_args__ = {
         'polymorphic_identity':'student'
+    }
+
+
+
+class Faculty(User):
+    __tablename__ = 'Faculty'
+    id = db.Column(db.ForeignKey('user.id'), primary_key=True)
+    officehours = db.Column(db.String(64))
+    __mapper_args__ = {
+        'polymorphic_identity':'Faculty'
     }
 
 
@@ -63,21 +96,24 @@ class ElectiveTag(db.Model):
     name = db.Column(db.String(50))
     
     def __repr__(self):
-        return 'ID - {} Name - {};'.format(self.id, self.name)
+        return 'ID - {} Name - {}'.format(self.id, self.name)
 
+class ProgramLanguageTag(db.Model):
+    __tablename__ = 'programlanguagetag'
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(50))
 
-class Faculty(User):
-    __tablename__ = 'faculty'
-    officeHours = db.Column(db.String(64))
-    __mapper_args__ = {
-        'polymorphic_identity':'faculty'
-    }
+    def __repr__(self):
+        return 'ID - {} Name - {}'.format(self.id, self.name)
 
+class ResearchTopicTag(db.Model):
+    __tablename__ = 'researchtopictag'
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(50))
 
+    def __repr__(self):
+        return 'ID - {} Name - {}'.format(self.id, self.name)
 
-@login.user_loader
-def load_user(id):
-    return User.query.get(int(id))
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True) #holds post id
