@@ -43,13 +43,7 @@ def createPost():
 @login_required
 def createApplication(post_id):
     aform = ApplicationForm()
-    addTag = TagForm()
     if aform.validate_on_submit():
-        # if addTag.validate_on_submit():
-        #     addTag = Tag(name = addTag.newField.data)
-        #     db.session.add(addTag)
-        #     db.session.commit()
-
         cPost = Post.query.filter_by(id = post_id).first()
         #Create new application instance 
         newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, phoneNum = aform.phoneNum.data, body = aform.body.data)
@@ -59,7 +53,7 @@ def createApplication(post_id):
         db.session.commit()
         flash('Your Application has be submitted!')
         return redirect(url_for('routes.index'))
-    return render_template('_createApplication.html', form = aform, tagForm = addTag)
+    return render_template('_createApplication.html', form = aform)
 
 @bp_routes.route('/addTag', methods = ['GET', 'POST'])
 @login_required
@@ -78,7 +72,7 @@ def addTag():
             else:
                 db.session.add(addTag)
                 db.session.commit()
-        return redirect(url_for('routes.createPost'))
+        return redirect(url_for('routes.display_profile'))
     return render_template('createtag.html', form = addTag)
 
 @bp_routes.route('/display_profile', methods = ['GET'])
@@ -106,6 +100,5 @@ def edit_profile():
         eform.firstname.data = current_user.firstname
         eform.lastname.data = current_user.lastname
         eform.email.data = current_user.email
-    else:
-        pass
+    
     return render_template('editProfile.html', title = 'Edit Profile', form = eform)

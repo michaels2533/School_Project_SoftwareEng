@@ -59,7 +59,7 @@ class Post(db.Model):
    
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key = True) #holds tag id's
-    name = db.Column(db.String(20), unique = True, nullable = True) # 
+    name = db.Column(db.String(20)) # 
     def __repr__(self):
         return '{} - {}'.format(self.id, self.name) #prints out id - name on post
 
