@@ -43,9 +43,15 @@
                     </li>
                 {% else %}
                     <!-- If user is logged in, user can display their profile -->
-                        <li class="nav-item  mx-2">
-                            <a class="nav-link" href="{{ url_for('routes.display_profile') }}">Profile</a>
-                        </li>
+
+                    
+                    {% if current_user.userType == "student" %}
+                        <td><a href = "{{ url_for('routes.student_display_profile') }}" class = "navbutton"> Profile </a></td>
+                    {% endif %}
+                    
+                    {% if current_user.userType == "Faculty" %}
+                        <td><a href = "{{ url_for('routes.faculty_display_profile') }}" class = "navbutton"> Profile </a></td>
+                    {% endif %}
 
                     <!-- Will only display Create Post if Faculty ... may need to associate with user so you cannot type in browser /createPost-->
                     {% if current_user.userType == "Faculty" %}
