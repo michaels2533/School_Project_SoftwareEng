@@ -95,52 +95,6 @@
 	margin: 10px 0px 10px 0px;
 }
 
-.posttable { 
-    width : 100%;
-    margin: 0px;
-}
-
-.posttitle {
-    text-align: center;
-    font-weight: bold;
-    padding : 3px;    
-    font-style: Georgia;
-}
-
-.postmessage {
-    padding : 3px;    
-    font-style: Georgia;
-    width: 330px;
-    padding-top: 5px;
-    border-width: 1px;
-    word-wrap: break-word;
-    margin-left: 5px;
-}
-
-.posttimestamp {
-    padding : 3px;    
-    font-style: Georgia;
-    font-weight: bold;
-    text-align: left;
-    margin-top: 0px;
-}
-
-.formselect {
-    width: 50%;
-    height: 60px;
-    font-style: Georgia;
-    margin: 10;
-    padding: 3px;
-}
-
-.post-box {
-    display: flex;
-    vertical-align: middle;
-    background-color: rgb(207, 203, 203);
-    margin: 10px;
-    padding: 1px;      
-}
-
 body {
     margin: 1px 1px 1px 15px;
     padding: 1px;

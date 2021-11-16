@@ -5,59 +5,68 @@
     {% if form %}
     <form action ="" method = "POST">
         {{form.hidden_tag()}}
-
-            <p> {{ form.username.label}}</p>
-            <p> {{ form.username(class ='textinput')}}</p>
+            <div class = 'form-floating w-25 p-2'>
+                {{ form.username(class ='form-control', id= 'floatingInput', placeholder='name@example.com')}}
+                {{ form.username.label(for = 'floatingInput') }}
+            </div>
 
             {% for error in form.username.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-            <p> {{ form.firstname.label}}</p>
-            <p> {{ form.firstname(class ='textinput')}}</p>
+            <div class = 'form-floating w-25 p-2'>
+                {{ form.firstname(class ='form-control', id= 'floatingInput', placeholder='name@example.com')}}
+                {{ form.firstname.label(for = 'floatingInput') }}
+            </div>
 
             {% for error in form.firstname.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-            <p> {{ form.lastname.label}}</p>
-            <p> {{ form.lastname(class ='textinput')}}</p>
+            <div class = 'form-floating w-25 p-2'>
+                {{ form.lastname(class ='form-control', id= 'floatingInput', placeholder='name@example.com')}}
+                {{ form.lastname.label(for = 'floatingInput') }}
+            </div>
 
             {% for error in form.lastname.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-            <p> {{ form.email.label}}</p>
-            <p> {{ form.email(class ='textinput')}}</p>
+            <div class = 'form-floating w-25 p-2'>
+                {{ form.email(class ='form-control', id= 'floatingInput', placeholder='name@example.com')}}
+                {{ form.email.label(for = 'floatingInput') }}
+            </div>
 
             {% for error in form.email.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-
-            <p> {{ form.password.label}}</p>
-            <p> {{ form.password(class ='textinput')}}</p>
+            <div class = 'form-floating w-25 p-2'>
+                {{ form.password(type= 'password', class ='form-control', id= 'floatingInput', placeholder='name@example.com')}}
+                {{ form.password.label(for = 'floatingInput') }}
+            </div>
 
             {% for error in form.password.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-            <p> {{ form.password2.label}}</p>
-            <p> {{ form.password2(class ='textinput')}}</p>
+            <div class = 'form-floating w-25 p-2'>
+                {{ form.password2(type= 'password', class ='form-control', id= 'floatingInput', placeholder='name@example.com')}}
+                {{ form.password2.label(for = 'floatingInput') }}
+            </div>
 
             {% for error in form.password2.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-            
             <p> {{ form.userType.label}}</p>
-            <p> {{ form.userType(class ='item')}}</p>
+            <p> {{ form.userType }}</p>
 
             {% for error in form.userType.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-            <p>{{ form.submit(class='button')}}</p>
+            {{ form.submit(class='btn btn-secondary')}}
     </form>
 
 {% endif %}
