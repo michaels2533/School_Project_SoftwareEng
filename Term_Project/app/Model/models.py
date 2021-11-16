@@ -134,6 +134,9 @@ class Post(db.Model):
     qualifications = db.Column(db.String(1500)) #will hold qualifications needed for the job
     researchFields = db.relationship('Tag', secondary =  createTags, primaryjoin = (createTags.c.post_id == id), backref=db.backref('createTags', lazy='dynamic'), lazy = 'dynamic')
     applicants = db.relationship('Application', backref = 'jobPost')
+    #will hold faculty first name / last name
+    facultyFirst = db.Column(db.String(26))
+    facultyLast = db.Column(db.String(26))
 
     def get_tags(self):
         return self.tags
