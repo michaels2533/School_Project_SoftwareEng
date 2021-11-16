@@ -18,23 +18,26 @@ bp_auth.template_folder = Config.TEMPLATE_FOLDER
 def register():
     rform = RegistrationForm()
     if rform.validate_on_submit():
-        if rform.userType.data == "Student":
-            studentUser = Student(username = rform.username.data, email = rform.email.data)
-            studentUser.set_password(rform.password.data)
-            db.session.add(studentUser)
-            db.session.commit()
-            flash("Congrats, you are now registered!")
-            login_user(studentUser)
-            return redirect(url_for('routes.student_edit_profile'))
+        if(User.query.filter_by(email = rform.email.data).count() < 1):
+            if rform.userType.data == "Student":
+                studentUser = Student(username = rform.username.data, email = rform.email.data)
+                studentUser.set_password(rform.password.data)
+                db.session.add(studentUser)
+                db.session.commit()
+                flash("Congrats, you are now registered!")
+                login_user(studentUser)
+                return redirect(url_for('routes.student_edit_profile'))
 
-        if rform.userType.data == "Faculty":
-            facultyUser = Faculty(username = rform.username.data, email = rform.email.data)
-            facultyUser.set_password(rform.password.data)
-            db.session.add(facultyUser)
-            db.session.commit()
-            flash("Congrats, you are now registered!")
-            login_user(facultyUser)
-            return redirect(url_for('routes.faculty_edit_profile'))
+            if rform.userType.data == "Faculty":
+                facultyUser = Faculty(username = rform.username.data, email = rform.email.data)
+                facultyUser.set_password(rform.password.data)
+                db.session.add(facultyUser)
+                db.session.commit()
+                flash("Congrats, you are now registered!")
+                login_user(facultyUser)
+                return redirect(url_for('routes.faculty_edit_profile'))
+        else:
+            flash('The email address you selected is already in use')
 
     return render_template('register.html', form = rform)
 
@@ -45,7 +48,7 @@ def login():
          return redirect(url_for('routes.index'))
     lform = LoginForm()
     if lform.validate_on_submit():
-        user = User.query.filter_by(email =lform.username.data).first()
+        user = User.query.filter_by(username =lform.username.data).first()
         if (user is None) or (user.get_password(lform.password.data) == False):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
