@@ -9,13 +9,9 @@
     <p> <b> Major: </b> {{student.major }} </p>
     <p> <b> GPA: </b> {{student.GPA }} </p>
     <p> <b> Graduation Date: </b> {{student.gradDate }} </p>
-    <p> <b> Research Topics: </b> {{student.researchTopics }} </p>
-    <p> <b> Programming Languages: </b> {{student.programLanguages }} </p> 
-    <p> <b> Technical Electives: </b> 
-        {% for elective in student.elective_tag.data %}
-            {elective} 
-        {% endfor %}
-        </p> 
+    <p> <b> Research Topics: </b> {{student.researchtopic_tag.all()}} </p>
+    <p> <b> Programming Languages: </b> {{student.programlangauge_tag.all()}} </p> 
+    <p> <b> Technical Electives: </b>{{student.elective_tag.all()}} </p> 
 
 
     {% if student == current_user %}

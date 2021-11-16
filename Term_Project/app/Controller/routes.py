@@ -145,13 +145,13 @@ def student_edit_profile():
             current_user.gradDate = sform.gradDate.data
             # current_user.electives = sform.electives.data
             for i in sform.electives.data:
-                current_user.electives = i
+                current_user.elective_tag.append(i)
             #current_user.researchTopics = sform.researchTopics.data
             for i in sform.researchTopics.data:
-                current_user.researchtopics = i
+                current_user.researchtopic_tag.append(i)
             # current_user.programLanguages = sform.programLanguages.data
             for i in sform.programLanguages.data:
-                current_user.programminglanguages = i
+                current_user.programlangauge_tag.append(i)
 
             current_user.experience = sform.experience.data
             current_user.set_password(sform.password.data)

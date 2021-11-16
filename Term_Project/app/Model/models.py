@@ -95,7 +95,7 @@ class ElectiveTag(db.Model):
     name = db.Column(db.String(50))
     
     def __repr__(self):
-        return 'ID - {} Name - {}'.format(self.id, self.name)
+        return '{}'.format(self.name)
 
 class ProgramLanguageTag(db.Model):
     __tablename__ = 'programlanguagetag'
@@ -103,7 +103,7 @@ class ProgramLanguageTag(db.Model):
     name = db.Column(db.String(50))
 
     def __repr__(self):
-        return 'ID - {} Name - {}'.format(self.id, self.name)
+        return '{}'.format(self.name)
 
 class ResearchTopicTag(db.Model):
     __tablename__ = 'researchtopictag'
@@ -111,7 +111,7 @@ class ResearchTopicTag(db.Model):
     name = db.Column(db.String(50))
 
     def __repr__(self):
-        return 'ID - {} Name - {}'.format(self.id, self.name)
+        return '{}'.format(self.name)
 
 
 #items from Models post and tags
