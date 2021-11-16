@@ -41,14 +41,15 @@ class PostForm(FlaskForm):
     requiredTime = SelectField('Time Required', choices = [('5 Hours'), ('10 Hours'), ('15 Hours'), ('20 Hours'), ('25 Hours'), ('30 Hours'), ('35 Hours'), ('40 Hours')])
     qualifications = TextAreaField('Qualifications Needed', validators = [DataRequired()])
     researchFields = QuerySelectMultipleField( 'Research Fields', query_factory = queryFactory , get_label = getLabel , widget = ListWidget(prefix_label=False), option_widget=CheckboxInput() ) 
+    # facultyFirst = StringField('Faculty First Name', validators=[DataRequired()])
+    # facultyLast = StringField('Faculty Last Name', validators=[DataRequired()])
     submit = SubmitField('Post') #submit button
 
 class ApplicationForm(FlaskForm):
-    firstName = StringField('First', validators=[DataRequired()])
-    lastName = StringField('Last', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(),Email()])
-    phoneNum = StringField('Phone', validators = [DataRequired()])
-    body = TextAreaField('Resume', validators = [DataRequired()])
+    firstName = StringField('Reference First Name', validators=[DataRequired()])
+    lastName = StringField('Reference Last Name', validators=[DataRequired()])
+    email = StringField('Reference Email', validators=[DataRequired(),Email()])
+    body = TextAreaField('Why are You Interested?', validators = [DataRequired()])
     submit = SubmitField('Submit Application')
 
 class EditForm(FlaskForm):

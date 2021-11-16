@@ -30,7 +30,7 @@ def initDB(*args, **kwargs):
         db.session.commit()
 
     if ResearchTopicTag.query.count() == 0:
-        rTag =  ['AI', 'Machine Learning', 'Neural Networks', 'Database Systems', 'Security']
+        rTag =  ['Data Structures', 'Machine Learning', 'High Perfomance Computing', 'Web Development', 'Computer Architecture']
         for r in rTag:
             db.session.add(ResearchTopicTag(name = r))
         db.session.commit()

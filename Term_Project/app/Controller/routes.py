@@ -33,7 +33,7 @@ def createPost():
     posts = Post.query.order_by(Post.timestamp.desc())
     if pform.validate_on_submit():
         newPost = Post(title = pform.title.data, description = pform.description.data, startDate = pform.start.data, endDate = pform.end.data, requiredTime = pform.requiredTime.data
-        , qualifications = pform.qualifications.data)
+        , qualifications = pform.qualifications.data, facultyFirst = current_user.firstname, facultyLast = current_user.lastname, facultyEmail = current_user.email)
         for t in pform.researchFields.data:
             newPost.researchFields.append(t)
         db.session.add(newPost)
@@ -49,7 +49,7 @@ def createApplication(post_id):
     if aform.validate_on_submit():
         cPost = Post.query.filter_by(id = post_id).first()
         #Create new application instance 
-        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, phoneNum = aform.phoneNum.data, body = aform.body.data)
+        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data)
         newApplication.jobPost = cPost
         #Saves the Application to the database
         db.session.add(newApplication)
@@ -145,13 +145,13 @@ def student_edit_profile():
             current_user.gradDate = sform.gradDate.data
             # current_user.electives = sform.electives.data
             for i in sform.electives.data:
-                current_user.electives = i
+                current_user.elective_tag.append(i)
             #current_user.researchTopics = sform.researchTopics.data
             for i in sform.researchTopics.data:
-                current_user.researchtopics = i
+                current_user.researchtopic_tag.append(i)
             # current_user.programLanguages = sform.programLanguages.data
             for i in sform.programLanguages.data:
-                current_user.programminglanguages = i
+                current_user.programlangauge_tag.append(i)
 
             current_user.experience = sform.experience.data
             current_user.set_password(sform.password.data)
@@ -181,3 +181,10 @@ def student_edit_profile():
     else:
         pass
     return render_template('studentEditProfile.html', title = 'Edit Profile', form = sform)
+
+@bp_routes.route("/appliedStatus/", methods = ['GET', 'POST'])
+@login_required
+def appliedStatus():
+    appliedpost = Post.query.all()
+    appliedStudent = Application.query.all()
+    return render_template('applied.html', title = 'Applied Students', post = appliedpost, applied = appliedStudent)

@@ -26,7 +26,7 @@ rTags = db.Table('rTags',
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True) #id of user
-    username = db.Column(db.String(64), unique = True)
+    username = db.Column(db.String(64))
     firstname = db.Column(db.String(64))
     lastname = db.Column(db.String(64))
     email =  db.Column(db.String(120), unique = True)
@@ -95,7 +95,7 @@ class ElectiveTag(db.Model):
     name = db.Column(db.String(50))
     
     def __repr__(self):
-        return 'ID - {} Name - {}'.format(self.id, self.name)
+        return '{}'.format(self.name)
 
 class ProgramLanguageTag(db.Model):
     __tablename__ = 'programlanguagetag'
@@ -103,7 +103,7 @@ class ProgramLanguageTag(db.Model):
     name = db.Column(db.String(50))
 
     def __repr__(self):
-        return 'ID - {} Name - {}'.format(self.id, self.name)
+        return '{}'.format(self.name)
 
 class ResearchTopicTag(db.Model):
     __tablename__ = 'researchtopictag'
@@ -111,7 +111,7 @@ class ResearchTopicTag(db.Model):
     name = db.Column(db.String(50))
 
     def __repr__(self):
-        return 'ID - {} Name - {}'.format(self.id, self.name)
+        return '{}'.format(self.name)
 
 
 #items from Models post and tags
@@ -134,6 +134,10 @@ class Post(db.Model):
     qualifications = db.Column(db.String(1500)) #will hold qualifications needed for the job
     researchFields = db.relationship('Tag', secondary =  createTags, primaryjoin = (createTags.c.post_id == id), backref=db.backref('createTags', lazy='dynamic'), lazy = 'dynamic')
     applicants = db.relationship('Application', backref = 'jobPost')
+    #will hold faculty first name / last name
+    facultyFirst = db.Column(db.String(26))
+    facultyLast = db.Column(db.String(26))
+    facultyEmail = db.Column(db.String(26))
 
     def get_tags(self):
         return self.tags
@@ -151,7 +155,6 @@ class Application(db.Model):
     firstName = db.Column(db.String(26))
     lastName = db.Column(db.String(26))
     email = db.Column(db.String(120))
-    phoneNum = db.Column(db.String(20))
     body = db.Column(db.String(1500))
     post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
 
