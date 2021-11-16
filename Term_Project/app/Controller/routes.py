@@ -33,7 +33,7 @@ def createPost():
     posts = Post.query.order_by(Post.timestamp.desc())
     if pform.validate_on_submit():
         newPost = Post(title = pform.title.data, description = pform.description.data, startDate = pform.start.data, endDate = pform.end.data, requiredTime = pform.requiredTime.data
-        , qualifications = pform.qualifications.data, facultyFirst = current_user.firstname, facultyLast = current_user.lastname)
+        , qualifications = pform.qualifications.data, facultyFirst = current_user.firstname, facultyLast = current_user.lastname, facultyEmail = current_user.email)
         for t in pform.researchFields.data:
             newPost.researchFields.append(t)
         db.session.add(newPost)
@@ -49,7 +49,7 @@ def createApplication(post_id):
     if aform.validate_on_submit():
         cPost = Post.query.filter_by(id = post_id).first()
         #Create new application instance 
-        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, phoneNum = aform.phoneNum.data, body = aform.body.data)
+        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data)
         newApplication.jobPost = cPost
         #Saves the Application to the database
         db.session.add(newApplication)

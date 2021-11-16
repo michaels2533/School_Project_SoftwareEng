@@ -36,6 +36,17 @@
             <!-- timestamp; display as local date/time , figure out styling later -->
             Posted at: {{ post.timestamp }} 
          </div> 
+
+         <div class="postmessage"> <!-- Need to edit CSS file to fix styling -->
+            <!-- post name -->
+            <b>Faculty Name:</b> {{ post.facultyFirst }} {{ post.facultyLast }}    
+         </div>
+
+         <div class="postmessage"> <!-- Need to edit CSS file to fix styling -->
+            <!-- post name -->
+            <b>Faculty Contact:</b> {{post.facultyEmail}}
+         </div>
+
         </td> 
         {% if current_user.userType == "student" %}
         <td>

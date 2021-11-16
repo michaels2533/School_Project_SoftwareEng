@@ -137,6 +137,7 @@ class Post(db.Model):
     #will hold faculty first name / last name
     facultyFirst = db.Column(db.String(26))
     facultyLast = db.Column(db.String(26))
+    facultyEmail = db.Column(db.String(26))
 
     def get_tags(self):
         return self.tags
@@ -154,7 +155,6 @@ class Application(db.Model):
     firstName = db.Column(db.String(26))
     lastName = db.Column(db.String(26))
     email = db.Column(db.String(120))
-    phoneNum = db.Column(db.String(20))
     body = db.Column(db.String(1500))
     post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
 
