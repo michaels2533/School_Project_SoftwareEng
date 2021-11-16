@@ -33,7 +33,7 @@ def createPost():
     posts = Post.query.order_by(Post.timestamp.desc())
     if pform.validate_on_submit():
         newPost = Post(title = pform.title.data, description = pform.description.data, startDate = pform.start.data, endDate = pform.end.data, requiredTime = pform.requiredTime.data
-        , qualifications = pform.qualifications.data)
+        , qualifications = pform.qualifications.data, facultyFirst = current_user.firstname, facultyLast = current_user.lastname)
         for t in pform.researchFields.data:
             newPost.researchFields.append(t)
         db.session.add(newPost)
@@ -181,3 +181,10 @@ def student_edit_profile():
     else:
         pass
     return render_template('studentEditProfile.html', title = 'Edit Profile', form = sform)
+
+@bp_routes.route("/appliedStatus/", methods = ['GET', 'POST'])
+@login_required
+def appliedStatus():
+    appliedpost = Post.query.all()
+    appliedStudent = Application.query.all()
+    return render_template('applied.html', title = 'Applied Students', post = appliedpost, applied = appliedStudent)
