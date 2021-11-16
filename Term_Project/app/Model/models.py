@@ -26,7 +26,7 @@ rTags = db.Table('rTags',
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True) #id of user
-    username = db.Column(db.String(64), unique = True)
+    username = db.Column(db.String(64))
     firstname = db.Column(db.String(64))
     lastname = db.Column(db.String(64))
     email =  db.Column(db.String(120), unique = True)
