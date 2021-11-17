@@ -1,0 +1,57 @@
+<table class = "posttable" style = "width:100%" valign="top">
+    <tr> 
+        <!-- Post Title -->
+        <td colspan="3"><div class="posttitle"> {{post.title}} </div>
+        </td>
+    </tr>
+        <td width="80%" >
+            <div class="postmessage"> <!-- Need to edit CSS file to fix styling -->
+              <!-- post body -->
+              {{ post.description }}    
+           </div>
+           <div class="postmessage"> <!-- Need to edit CSS file to fix styling -->
+            <!-- post will post job qualifications needed -->
+            {{ post.qualifications }}    
+         </div>
+         <div class="postmessage"> 
+            <!-- will post all researchFields job will look into researching -->
+            Research Fields
+            {% for tag in post.researchFields.all() %}
+                    <div class = "tagitem">
+                        <span style = "color: rgb(22, 21, 21);"> {{ tag.name }}</span> <!-- span element? -->
+                    </div>
+            {% endfor %}
+         </div>
+         <!-- Required Time -->
+         <div class="postmessage"> 
+            <!-- will post all researchFields job will look into researching -->
+            <b>Required Amount of Time: </b> {{ post.requiredTime }} 
+         </div>  
+         <!-- Start / End Date -->
+         <div class="postmessage"> 
+            <!-- will post all researchFields job will look into researching -->
+            <b>Start:</b> {{ post.startDate }}<b> End: </b>{{ post.endDate }} 
+         </div> 
+         <div class="posttimestamp"> 
+            <!-- timestamp; display as local date/time , figure out styling later -->
+            Posted at: {{ post.timestamp }} 
+         </div> 
+
+         <div class="postmessage"> <!-- Need to edit CSS file to fix styling -->
+            <!-- post name -->
+            <b>Faculty Name:</b> {{ post.facultyFirst }} {{ post.facultyLast }}    
+         </div>
+
+         <div class="postmessage"> <!-- Need to edit CSS file to fix styling -->
+            <!-- post name -->
+            <b>Faculty Contact:</b> {{post.facultyEmail}}
+         </div>
+
+        </td> 
+        {% if current_user.userType == "student" %}
+        <td>
+            <a href = "{{ url_for('routes.createApplication', post_id = post.id) }}" class = 'applybutton'> Apply </a>
+        </td>
+        {% endif %}
+    
+</table>

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Post New Research Position</h1>
+
+    {% if form %}
+
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class = "wrapper">
+            <div class="formtitle">
+                <!--Displays the form item for the post's `title`.-->
+                {{ form.newField.label }}<br>
+                {{ form.newField(class="formtitle") }}<br>
+    
+                <!-- Errors for Title  -->
+                {% for error in form.newField.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+
+            <br>
+
+            {{ form.submit(class="createbutton") }}
+        </div>
+        
+    </form>
+    {% endif %}
+
+
+  {% endblock %}

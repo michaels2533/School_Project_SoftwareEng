@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Applied Status</h1>
+
+    <table  class = "table table-hover">
+        <tr valign = "center">
+            <td width = "5%"> Firstname </td>
+            <td width = "25%"> Lastname </td>
+            <td width = "10%"> Faculty Member </td>
+            <td width = "30%"> Job Title </td>
+            <td width = "30%"> Status </td>
+        </tr>
+    </table>
+    {% for student in applied %}
+        {% for postname in post %}
+            {% if postname.id == student.post_id %}
+                {% include '_applied.html' %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}

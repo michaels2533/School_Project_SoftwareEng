@@ -1,0 +1,201 @@
+
+/*
+.username{
+    position: relative; left: 7px; top: 45px;
+}
+
+.button {
+    width : 5%;
+    padding : 3px;    
+    font-size: 16px;
+    margin : 5px;
+    padding : 5px;
+    border: 1px solid lightgray;
+    background-color: white;
+}
+
+.applybutton{
+    width : 5%;
+    padding : 3px;    
+    font-size: 16px;
+    margin : 5px;
+    padding : 5px;
+    border: 1px solid lightgray;
+    margin-left: 0px;
+}
+
+.navbutton{
+    width : 5%;
+    padding : 3px;    
+    font-size: 16px;
+    padding : 5px;
+    border: 1px solid lightgray;
+    background-color: white;
+    margin-top: 10px;
+    margin-left: 5px;
+    position: relative; top: 15px;
+}
+
+.createbutton{
+    width : 10%;
+    padding : 3px;    
+    font-size: 16px;
+    margin : 5px;
+    padding : 5px;
+    border: 1px solid rgb(27, 25, 25);
+    background-color: white;
+    position: relative; top: 50px;
+}
+
+.formtitle {
+    width: 90%;
+    font-style: Georgia;
+    margin: 10px 1px;
+    padding: 0x;
+}
+
+.formbody {
+    width: 90%;
+    height: 50px;
+    font-style: Georgia;
+    margin: 10px 1px;
+    padding: 1px;
+    display: inline;
+  
+}
+
+.date{
+    margin: 10px 1px;
+
+}
+
+.nav-container {
+    background:#ee5858;
+    font-family: Tahoma;
+    font-size: 12px;
+    height: 100px;
+    width: 2000px;
+    text-transform: uppercase;
+    padding: 0px;
+    margin: 0px;
+    position: relative; right: 20px;
+}
+
+.img{
+    max-width: 50px;
+    height: 50px;
+    float: left;
+}
+
+.flash-container {
+    background:#99c5ee; 
+	font-family: Tahoma; 
+	font-size: 16px;
+	padding: 25px; 
+	margin: 10px 0px 10px 0px;
+}
+
+body {
+    margin: 1px 1px 1px 15px;
+    padding: 1px;
+    font-family: Tahoma;
+    text-align: left;
+  
+}
+
+.tagitem {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    background-color: rgb(253, 250, 250);
+    border: 3px solid black;
+    margin: 5px auto;
+    padding: 3px;
+    width: 100px;  
+}
+
+*/
+
+.posttable { 
+    width : 100%;
+    margin: 0px;
+}
+
+.posttitle {
+    text-align: center;
+    font-weight: bold;
+    padding : 3px;    
+    font-style: Georgia;
+}
+
+.postmessage {
+    padding : 3px;    
+    font-style: Georgia;
+    width: 330px;
+    padding-top: 5px;
+    border-width: 1px;
+    word-wrap: break-word;
+    margin-left: 5px;
+}
+
+.posttimestamp {
+    padding : 3px;    
+    font-style: Georgia;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 0px;
+}
+
+
+.formselect {
+    width: 50%;
+    height: 60px;
+    font-style: Georgia;
+    margin: 10;
+    padding: 3px;
+}
+
+.post-box {
+    display: flex;
+    vertical-align: middle;
+    background-color: rgb(207, 203, 203);
+    margin: 10px;
+    padding: 1px;      
+}
+
+
+.postlist {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.postboy {
+    border-bottom-color: rgb(212, 210, 208);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-repeat: stretch;
+    border-left-color: rgb(212, 210, 208);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgb(212, 210, 208);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgb(212, 210, 208);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: none;
+    cursor: pointer;
+    display: block;
+    font-family :"Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 17px;
+    margin-bottom: 12px;
+    margin-top: 1px;
+    position: relative;
+    width: 410px;
+    margin-left: 5px;
+    margin-right: 5px;
+    }

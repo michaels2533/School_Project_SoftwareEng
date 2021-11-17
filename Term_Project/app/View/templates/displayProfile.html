@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1> <b>Display Student Profile</b></h1>
+    <h2> <b>Student username: {{ user.username }}</b></h2>
+    <p> <b> Firstname: </b> {{user.firstname }} </p>
+    <p> <b> Lastname: </b> {{user.lastname }} </p>
+    <p> <b> Email: </b> {{user.email }} </p>
+
+    {% if student == current_user %}
+        <p><a href = " {{ url_for('routes.edit_profile') }} ">Edit Your Profile</a></p>
+    {% endif %}
+    <td><a href="{{ url_for('routes.addTag') }}" class = ""> Add New Tag </a></td>
+{% endblock %}
