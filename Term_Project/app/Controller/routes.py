@@ -10,7 +10,7 @@ from app import db
 from app.Controller.forms import PostForm, ApplicationForm, EditForm, TagForm
 from app.Model.models import Post, Application, Tag
 from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm
-from app.Model.models import Post, Application
+from app.Model.models import Post, Application, User
 
 from flask_login import current_user, login_required
 
@@ -87,10 +87,11 @@ def display_profile():
         return redirect(url_for('routes.faculty_display_profile'))
     return
     
-@bp_routes.route('/student_display_profile', methods = ['GET'])
+@bp_routes.route('/student_display_profile/', methods = ['GET'])
 @login_required
-def student_display_profile():
-    return render_template('studentDisplayProfile.html',title = 'Display Profile', student = current_user)
+def student_display_profile(student_id):
+    viewStudent = User.query.filter_by(id = student_id).first()
+    return render_template('studentDisplayProfile.html',title = 'Display Profile', student = current_user, viewer = viewStudent)
 
 @bp_routes.route('/faculty_display_profile', methods = ['GET'])
 @login_required
