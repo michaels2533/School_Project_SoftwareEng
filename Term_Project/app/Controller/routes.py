@@ -9,7 +9,7 @@ from config import Config
 from app import db
 from app.Controller.forms import PostForm, ApplicationForm, EditForm, TagForm
 from app.Model.models import Post, Application, Tag
-from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm
+from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm, RecommendedSearchForm
 from app.Model.models import Post, Application
 
 from flask_login import current_user, login_required
@@ -23,8 +23,11 @@ bp_routes.template_folder = Config.TEMPLATE_FOLDER #'..\\View\\templates'
 @login_required
 def index():
     posts = Post.query.order_by(Post.timestamp.desc())
-
-    return render_template('index.html', title = 'Research Postings Portal', posts = posts.all())
+    rform = RecommendedSearchForm()
+    if rform.validate_on_submit():
+        if rform.boolField.data == True:
+            posts = posts.order_by(Post.researchFields)
+    return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), form = rform)
 
 @bp_routes.route("/createpost", methods = ['GET', 'POST'])
 @login_required

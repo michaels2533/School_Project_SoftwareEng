@@ -4,6 +4,24 @@
 
     <h1>Welcome to WSU Research Openings!</h1>
 
+    <!-- Recommended Search -->
+    {% if posts %}
+
+        <form action="" method="post">
+            <div class="formselect">
+
+            Recommended Search: {{form.boolField}}
+
+            </div>
+            
+            {{ form.refresh(form="button") }}
+
+        </form>
+
+    {% endif %}
+
+
+
     <!-- Displays Posts -->
     <div class = "postlist">
         {% for post in posts %}
