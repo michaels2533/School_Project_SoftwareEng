@@ -10,7 +10,7 @@ from app import db
 from app.Controller.forms import PostForm, ApplicationForm, EditForm, TagForm
 from app.Model.models import Post, Application, Tag
 from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm, RecommendedSearchForm
-from app.Model.models import Post, Application
+from app.Model.models import Post, Application, Student
 
 from flask_login import current_user, login_required
 
@@ -24,10 +24,24 @@ bp_routes.template_folder = Config.TEMPLATE_FOLDER #'..\\View\\templates'
 def index():
     posts = Post.query.order_by(Post.timestamp.desc())
     rform = RecommendedSearchForm()
-    if rform.validate_on_submit():
+    if current_user.userType == "student":
+        print("28")
+        #if rform.validate_on_submit():
+        print(rform.boolField.data)
         if rform.boolField.data == True:
-            posts = posts.order_by(Post.researchFields)
-    return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), form = rform)
+            print(32)
+            recommended = []
+            student = Student.query.filter_by(id = current_user.id).first()
+            for post in posts:
+                for field in post.researchFields:
+                    for tag in student.researchtopic_tag:
+                        if field == tag:
+                            recommended.append(post)
+                            break
+            return render_template('index.html', title = 'Research Postings Portal', posts = recommended, form = rform)
+
+                
+        return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), form = rform)
 
 @bp_routes.route("/createpost", methods = ['GET', 'POST'])
 @login_required
