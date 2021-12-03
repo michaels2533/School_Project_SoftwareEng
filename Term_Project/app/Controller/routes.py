@@ -8,7 +8,7 @@ from flask_wtf.form import FlaskForm
 from config import Config
 from app import db
 from app.Controller.forms import PostForm, ApplicationForm, EditForm, TagForm
-from app.Model.models import Post, Application, Tag
+from app.Model.models import Post, Application, Student, Tag
 from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm
 from app.Model.models import Post, Application, User
 
@@ -81,16 +81,17 @@ def addTag():
 @bp_routes.route('/display_profile', methods = ['GET'])
 @login_required
 def display_profile():
+    viewStudent = Student.query.all()
     if current_user.userType == "Student":
-        return redirect(url_for('routes.student_display_profile'))
+        return redirect(url_for('routes.student_display_profile', id = viewStudent.id))
     if current_user.userType == "Faculty":
         return redirect(url_for('routes.faculty_display_profile'))
     return
     
-@bp_routes.route('/student_display_profile/', methods = ['GET'])
+@bp_routes.route('/student_display_profile/<id>', methods = ['GET'])
 @login_required
-def student_display_profile(student_id):
-    viewStudent = User.query.filter_by(id = student_id).first()
+def student_display_profile(id):
+    viewStudent = Student.query.filter_by(id = id).first()
     return render_template('studentDisplayProfile.html',title = 'Display Profile', student = current_user, viewer = viewStudent)
 
 @bp_routes.route('/faculty_display_profile', methods = ['GET'])
@@ -159,7 +160,7 @@ def student_edit_profile():
             db.session.add(current_user)
             db.session.commit()
             flash("Your changes have been saved!")
-            return redirect(url_for('routes.student_display_profile'))
+            return redirect(url_for('routes.student_display_profile', id = current_user.id))
     elif request.method == 'GET':
         #populate the user data from DB
         sform.firstname.data = current_user.firstname

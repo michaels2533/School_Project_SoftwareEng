@@ -59,6 +59,7 @@ class Student(User):
     #programLanguages = db.Column(db.String(64))
     experience = db.Column(db.String(64))
     #electives = db.Column(db.String(64))
+    #profile_id = db.Column(db.Integer,db.ForeignKey('user.id'))
 
     elective_tag = db.relationship("ElectiveTag", secondary = eTags, primaryjoin=(eTags.c.student_id == id), 
                                                   backref=db.backref('estudent', lazy='dynamic'), lazy='dynamic')
