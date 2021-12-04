@@ -13,12 +13,10 @@
             <td width = "30%"> Status </td>
         </tr>
     </table>
-    {% for student in applied %}
-        {% for postname in post %}
-            {% if postname.id == student.post_id %}
-                {% include '_applied.html' %}
-            {% endif %}
-        {% endfor %}
+
+    {% for applicant in applicants %}
+    {{applicant.jobPost.title}}
+        {% include '_applied.html' %}
     {% endfor %}
 
 {% endblock %}

@@ -35,7 +35,7 @@ def register():
                 db.session.commit()
                 flash("Congrats, you are now registered!")
                 login_user(facultyUser)
-                return redirect(url_for('routes.faculty_edit_profile'))
+                return redirect(url_for('routes.edit_profile'))
         else:
             flash('The email address you selected is already in use')
 

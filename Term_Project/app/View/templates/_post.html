@@ -50,7 +50,7 @@
         </td> 
         {% if current_user.userType == "student" %}
         <td>
-            <a href = "{{ url_for('routes.createApplication', post_id = post.id) }}" class = 'applybutton'> Apply </a>
+            <a href = "{{ url_for('routes.createApplication', post_id = post.id, student_id = current_user.id) }}" class = 'applybutton'> Apply </a>
         </td>
         {% endif %}
     
