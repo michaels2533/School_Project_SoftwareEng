@@ -26,7 +26,7 @@ def register():
                 db.session.commit()
                 flash("Congrats, you are now registered!")
                 login_user(studentUser)
-                return redirect(url_for('routes.student_edit_profile'))
+                return redirect(url_for('routes.edit_profile'))
 
             if rform.userType.data == "Faculty":
                 facultyUser = Faculty(username = rform.username.data, email = rform.email.data)

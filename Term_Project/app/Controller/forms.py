@@ -46,8 +46,10 @@ class PostForm(FlaskForm):
     submit = SubmitField('Post') #submit button
 
 class ApplicationForm(FlaskForm):
-    
-E    body = TextAreaField('Why are You Interested?', validators = [DataRequired()])
+    firstName = StringField('Reference First Name',validators=[DataRequired()])
+    lastName = StringField('Reference Last Name',validators=[DataRequired()])
+    email = StringField('Reference Email',validators=[DataRequired(), Email()])
+    body = TextAreaField('Why are You Interested?', validators = [DataRequired()])
     submit = SubmitField('Submit Application')
 
 class EditForm(FlaskForm):

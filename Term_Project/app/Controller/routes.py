@@ -42,146 +42,114 @@ def createPost():
         return redirect(url_for('routes.index'))
     return render_template('createPost.html', form = pform, posts=posts.all())
 
-@bp_routes.route("/createApplication/<post_id>", methods = ['GET', 'POST'])
+@bp_routes.route("/createApplication/<post_id>/<student_id>", methods = ['GET', 'POST'])
 @login_required
-def createApplication(post_id):
+def createApplication(post_id, student_id):
     aform = ApplicationForm()
     if aform.validate_on_submit():
         cPost = Post.query.filter_by(id = post_id).first()
+        studentWhoApplied = Student.query.filter_by(id = student_id).first()
         #Create new application instance 
         newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data)
         newApplication.jobPost = cPost
+        newApplication.whoApplied = studentWhoApplied
         #Saves the Application to the database
         db.session.add(newApplication)
         db.session.commit()
         flash('Your Application has be submitted!')
         return redirect(url_for('routes.index'))
-    return render_template('_createApplication.html', form = aform)
-
-@bp_routes.route('/addTag', methods = ['GET', 'POST'])
-@login_required
-def addTag():
-    addTag = TagForm()
-    allTags = Tag.query.all()
-    if addTag.validate_on_submit():
-        addTag = Tag(name = addTag.newField.data)
-        if allTags == []:
-            db.session.add(addTag)
-            db.session.commit()
-        for t in allTags:
-            if addTag.name == t.name:
-                flash('Already a Research Tag')
-                break     
-            else:
-                db.session.add(addTag)
-                db.session.commit()
-        return redirect(url_for('routes.display_profile'))
-    return render_template('createtag.html', form = addTag)
+    return render_template('createApplication.html', form = aform)
 
 @bp_routes.route('/display_profile/<id>', methods = ['GET'])
 @login_required
 def display_profile(id):
     if current_user.userType == "Student":
-        return redirect(url_for('routes.student_display_profile', id))
+        # return redirect(url_for('routes.student_display_profile', id))
+        viewStudent = Student.query.filter_by(id = id).first()
+        return render_template('studentDisplayProfile.html',title = 'Display Profile', student = current_user, viewer = viewStudent)
     if current_user.userType == "Faculty":
-        return redirect(url_for('routes.faculty_display_profile'))
+        # return redirect(url_for('routes.faculty_display_profile'))
+        return render_template('facultyDisplayProfile.html',title = 'Display Profile', faculty = current_user)
     return
-    
-@bp_routes.route('/student_display_profile/<id>', methods = ['GET'])
-@login_required
-def student_display_profile(id):
-    viewStudent = Student.query.filter_by(id = id).first()
-    return render_template('studentDisplayProfile.html',title = 'Display Profile', student = current_user, viewer = viewStudent)
 
-@bp_routes.route('/faculty_display_profile', methods = ['GET'])
-@login_required
-def faculty_display_profile():
-    return render_template('facultyDisplayProfile.html',title = 'Display Profile', faculty = current_user)
     
 @bp_routes.route('/edit_profile', methods = ['GET', 'POST'])
 @login_required
 def edit_profile():
-    if current_user.userType == "student":  
-        return redirect(url_for('routes.student_edit_profile'))
-    if current_user.userType == "faculty":
-        return redirect(url_for('routes.faculty_edit_profile'))
+    if current_user.userType == "faculty":  #if editing a student profile
+        # return redirect(url_for('routes.student_edit_profile'))
+        fform = FacultyEditForm()
+        if request.method == 'POST':
+            #handle the form submission    
+                current_user.firstname = fform.firstname.data
+                current_user.lastname = fform.lastname.data
+                current_user.email = fform.email.data
+                current_user.officehours = fform.officehours.data
+                current_user.set_password(fform.password.data)
+                db.session.add(current_user)
+                db.session.commit()
+                flash("Your changes have been saved!")
+                return redirect(url_for('routes.display_profile'))
+        elif request.method == 'GET':
+            #populate the user data from DB
+            fform.firstname.data = current_user.firstname
+            fform.lastname.data = current_user.lastname
+            fform.email.data = current_user.email
+            fform.officehours.data = current_user.officehours
+            
+        return render_template('facultyEditProfile.html', title = 'Edit Profile', form = fform)
+    
+    if current_user.userType == "student": #if editing a faculty profile
+        # return redirect(url_for('routes.faculty_edit_profile'))
+        sform = StudentEditForm()
+        if request.method == 'POST':
+            #handle the form submission    
+                current_user.firstname = sform.firstname.data
+                current_user.lastname = sform.lastname.data
+                current_user.email = sform.email.data
+                current_user.major = sform.major.data
+                current_user.GPA = sform.GPA.data
+                current_user.gradDate = sform.gradDate.data
+                # current_user.electives = sform.electives.data
+                for i in sform.electives.data:
+                    current_user.elective_tag.append(i)
+                #current_user.researchTopics = sform.researchTopics.data
+                for i in sform.researchTopics.data:
+                    current_user.researchtopic_tag.append(i)
+                # current_user.programLanguages = sform.programLanguages.data
+                for i in sform.programLanguages.data:
+                    current_user.programlangauge_tag.append(i)
 
-    return redirect(url_for('routes.display_profile', current_user.id))
-
-@bp_routes.route('/faculty_edit_profile', methods = ['GET', 'POST'])
-@login_required
-def faculty_edit_profile():
-    fform = FacultyEditForm()
-    if request.method == 'POST':
-        #handle the form submission    
-            current_user.firstname = fform.firstname.data
-            current_user.lastname = fform.lastname.data
-            current_user.email = fform.email.data
-            current_user.officehours = fform.officehours.data
-            current_user.set_password(fform.password.data)
-            db.session.add(current_user)
-            db.session.commit()
-            flash("Your changes have been saved!")
-            return redirect(url_for('routes.faculty_display_profile'))
-    elif request.method == 'GET':
-        #populate the user data from DB
-        fform.firstname.data = current_user.firstname
-        fform.lastname.data = current_user.lastname
-        fform.email.data = current_user.email
-        fform.officehours.data = current_user.officehours
-        
-    return render_template('facultyEditProfile.html', title = 'Edit Profile', form = fform)      
-
-@bp_routes.route('/student_edit_profile', methods = ['GET', 'POST'])
-@login_required
-def student_edit_profile():
-    sform = StudentEditForm()
-    if request.method == 'POST':
-        #handle the form submission    
-            current_user.firstname = sform.firstname.data
-            current_user.lastname = sform.lastname.data
-            current_user.email = sform.email.data
-            current_user.major = sform.major.data
-            current_user.GPA = sform.GPA.data
-            current_user.gradDate = sform.gradDate.data
-            # current_user.electives = sform.electives.data
+                current_user.experience = sform.experience.data
+                current_user.set_password(sform.password.data)
+                db.session.add(current_user)
+                db.session.commit()
+                flash("Your changes have been saved!")
+                return redirect(url_for('routes.display_profile', id = current_user.id))
+        elif request.method == 'GET':
+            #populate the user data from DB
+            sform.firstname.data = current_user.firstname
+            sform.lastname.data = current_user.lastname
+            sform.email.data = current_user.email
+            sform.major.data = current_user.major
+            sform.GPA.data = current_user.GPA
+            sform.gradDate.data = current_user.gradDate
+            # sform.electives.data = current_user.electives
             for i in sform.electives.data:
-                current_user.elective_tag.append(i)
-            #current_user.researchTopics = sform.researchTopics.data
+                sform.electives.data = current_user.electives
+            #sform.researchTopics.data = current_user.researchTopics
             for i in sform.researchTopics.data:
-                current_user.researchtopic_tag.append(i)
-            # current_user.programLanguages = sform.programLanguages.data
+                sform.researchTopics = current_user.researchtopics
+            #sform.programLanguages.data = current_user.programLanguages
             for i in sform.programLanguages.data:
-                current_user.programlangauge_tag.append(i)
+                sform.programLanguages.data = current_user.programlanguages
+            sform.experience.data = current_user.experience
 
-            current_user.experience = sform.experience.data
-            current_user.set_password(sform.password.data)
-            db.session.add(current_user)
-            db.session.commit()
-            flash("Your changes have been saved!")
-            return redirect(url_for('routes.student_display_profile', id = current_user.id))
-    elif request.method == 'GET':
-        #populate the user data from DB
-        sform.firstname.data = current_user.firstname
-        sform.lastname.data = current_user.lastname
-        sform.email.data = current_user.email
-        sform.major.data = current_user.major
-        sform.GPA.data = current_user.GPA
-        sform.gradDate.data = current_user.gradDate
-        # sform.electives.data = current_user.electives
-        for i in sform.electives.data:
-            sform.electives.data = current_user.electives
-        #sform.researchTopics.data = current_user.researchTopics
-        for i in sform.researchTopics.data:
-            sform.researchTopics = current_user.researchtopics
-        #sform.programLanguages.data = current_user.programLanguages
-        for i in sform.programLanguages.data:
-            sform.programLanguages.data = current_user.programlanguages
-        sform.experience.data = current_user.experience
+        else:
+            pass
+        return render_template('studentEditProfile.html', title = 'Edit Profile', form = sform)
 
-    else:
-        pass
-    return render_template('studentEditProfile.html', title = 'Edit Profile', form = sform)
+    return redirect(url_for('routes.display_profile', current_user.id))    
 
 @bp_routes.route("/appliedStatus/", methods = ['GET', 'POST'])
 @login_required
