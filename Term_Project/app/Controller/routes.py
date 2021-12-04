@@ -78,12 +78,11 @@ def addTag():
         return redirect(url_for('routes.display_profile'))
     return render_template('createtag.html', form = addTag)
 
-@bp_routes.route('/display_profile', methods = ['GET'])
+@bp_routes.route('/display_profile/<id>', methods = ['GET'])
 @login_required
-def display_profile():
-    viewStudent = Student.query.all()
+def display_profile(id):
     if current_user.userType == "Student":
-        return redirect(url_for('routes.student_display_profile', id = viewStudent.id))
+        return redirect(url_for('routes.student_display_profile', id))
     if current_user.userType == "Faculty":
         return redirect(url_for('routes.faculty_display_profile'))
     return
@@ -107,7 +106,7 @@ def edit_profile():
     if current_user.userType == "faculty":
         return redirect(url_for('routes.faculty_edit_profile'))
 
-    return redirect(url_for('routes.display_profile'))
+    return redirect(url_for('routes.display_profile', current_user.id))
 
 @bp_routes.route('/faculty_edit_profile', methods = ['GET', 'POST'])
 @login_required

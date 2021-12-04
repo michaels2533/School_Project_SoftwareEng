@@ -158,5 +158,6 @@ class Application(db.Model):
     email = db.Column(db.String(120))
     body = db.Column(db.String(1500))
     post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
+    #user_id = 
 
 
