@@ -8,13 +8,14 @@
     {% if posts %}
 
         <form action="" method="post">
+            {{ form.hidden_tag() }}
             <div class="formselect">
 
-            Recommended Search: {{form.boolField}}
+                Recommended Search: {{form.boolField}}
 
             </div>
             
-            {{ form.refresh(form="button") }}
+            {{ form.refresh(class="button") }}
 
         </form>
 

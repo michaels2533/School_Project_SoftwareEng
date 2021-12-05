@@ -25,20 +25,36 @@ def index():
     posts = Post.query.order_by(Post.timestamp.desc())
     rform = RecommendedSearchForm()
     if current_user.userType == "student":
-        print("28")
-        #if rform.validate_on_submit():
-        print(rform.boolField.data)
-        if rform.boolField.data == True:
-            print(32)
-            recommended = []
-            student = Student.query.filter_by(id = current_user.id).first()
-            for post in posts:
-                for field in post.researchFields:
-                    for tag in student.researchtopic_tag:
-                        if field == tag:
-                            recommended.append(post)
-                            break
-            return render_template('index.html', title = 'Research Postings Portal', posts = recommended, form = rform)
+
+        if rform.validate_on_submit():
+
+            if rform.boolField.data == True:
+                recommended = []
+                postFields = []
+
+                # student = Student.query.filter_by(id = current_user.id).first()
+
+                student_interests = [ rt.name for rt in current_user.researchtopic_tag.all()]
+                
+                print(student_interests)
+                for post in posts:
+                    for field in post.researchFields:
+                        postFields.append(field)
+                    print(postFields)
+
+                    if student_interests in postFields:
+                        print(47)
+                        recommended.append(post)
+                    
+
+                # print(student_interests)
+                # for post in posts:
+                #     for field in post.researchFields:
+                #         for tag in student.researchtopic_tag:
+                #             if field == tag:
+                #                 #recommended.append(post)
+                #                 recommended.add(post)
+                return render_template('index.html', title = 'Research Postings Portal', posts = recommended, form = rform)
 
                 
         return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), form = rform)

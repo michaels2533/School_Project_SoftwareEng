@@ -22,6 +22,10 @@ rTags = db.Table('rTags',
                 db.Column('student_id', db.Integer, db.ForeignKey('student.id')), 
                 db.Column('researchtopic_id', db.Integer, db.ForeignKey('researchtopictag.id')))
 
+#items from Models post and tags
+createTags = db.Table('createTags',
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')))
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
@@ -66,6 +70,8 @@ class Student(User):
                                                   backref=db.backref('pstudent', lazy='dynamic'), lazy='dynamic')
     researchtopic_tag = db.relationship("ResearchTopicTag", secondary = rTags, primaryjoin=(rTags.c.student_id == id), 
                                                   backref=db.backref('rstudent', lazy='dynamic'), lazy='dynamic')
+  
+
 
     def get_electiveTags(self):
         return self.elective_tag
@@ -113,11 +119,13 @@ class ResearchTopicTag(db.Model):
     def __repr__(self):
         return '{}'.format(self.name)
 
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key = True) #holds tag id's
+    name = db.Column(db.String(20)) 
 
-#items from Models post and tags
-createTags = db.Table('createTags',
-    db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
-    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')))
+    def __repr__(self):
+        return '{}'.format(self.name) #prints out id - name on post
+
 
 class Post(db.Model):
     #Bellow is data we don't display
@@ -143,11 +151,7 @@ class Post(db.Model):
         return self.tags
     
    
-class Tag(db.Model):
-    id = db.Column(db.Integer, primary_key = True) #holds tag id's
-    name = db.Column(db.String(20)) # 
-    def __repr__(self):
-        return '{} - {}'.format(self.id, self.name) #prints out id - name on post
+
 
 
 class Application(db.Model):
