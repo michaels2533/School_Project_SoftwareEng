@@ -107,7 +107,4 @@
 
 """ The stuff bellow is for display profile, if the user was a student"""
 
-    # if current_user.userType == "student" :
-    #     # return redirect(url_for('routes.student_display_profile', id))
-    #     studentProfile = Student.query.filter_by(id = id).first()
-    #     return render_template('studentDisplayProfile.html',title = 'Display Profile', student = current_user)
+ 

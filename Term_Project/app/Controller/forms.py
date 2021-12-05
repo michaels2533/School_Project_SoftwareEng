@@ -1,3 +1,4 @@
+from flask.app import Flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, PasswordField, DateField
 from wtforms.validators import ValidationError, DataRequired, Length, Email, EqualTo
@@ -69,6 +70,7 @@ class EditForm(FlaskForm):
 class TagForm(FlaskForm):
     newField = StringField('New Research Field')
     submit = SubmitField('Add Tag')
+    
 class StudentEditForm(EditForm):
     major = StringField('Major', validators=[DataRequired()])
     GPA = StringField('GPA', validators=[DataRequired()])

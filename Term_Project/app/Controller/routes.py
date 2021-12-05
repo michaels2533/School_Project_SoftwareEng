@@ -7,10 +7,10 @@ from flask import render_template, redirect, url_for, request, flash
 from flask_wtf.form import FlaskForm
 from config import Config
 from app import db
-from app.Controller.forms import PostForm, ApplicationForm, EditForm, TagForm
-from app.Model.models import Post, Application, Student, Tag
-from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm
-from app.Model.models import Post, Application, User
+
+from app.Model.models import Post, Application, Student, User
+from app.Controller.forms import FacultyEditForm, PostForm, StudentEditForm, ApplicationForm
+
 
 from flask_login import current_user, login_required
 
@@ -23,8 +23,8 @@ bp_routes.template_folder = Config.TEMPLATE_FOLDER #'..\\View\\templates'
 @login_required
 def index():
     posts = Post.query.order_by(Post.timestamp.desc())
-
-    return render_template('index.html', title = 'Research Postings Portal', posts = posts.all())
+    user = User.query.filter_by(id = current_user.id)
+    return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), user = user)
 
 @bp_routes.route("/createpost", methods = ['GET', 'POST'])
 @login_required
@@ -41,6 +41,15 @@ def createPost():
         flash('Your Research post has be created!')
         return redirect(url_for('routes.index'))
     return render_template('createPost.html', form = pform, posts=posts.all())
+
+@bp_routes.route("/deletePost/<post_id>", methods = ['GET','DELETE', 'POST'])
+@login_required
+def deletePost(post_id):
+    post = Post.query.filter_by(id = post_id).first()
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your Research post has been DELETED!')
+    return redirect(url_for('routes.index'))
 
 @bp_routes.route("/createApplication/<post_id>/<student_id>", methods = ['GET', 'POST'])
 @login_required
@@ -69,11 +78,8 @@ def display_profile(id):
         return render_template('studentDisplayProfile.html',title = 'Display Profile', student = userProfile, reference = applicant)
     if userProfile.userType == "Faculty":
         return render_template('facultyDisplayProfile.html',title = 'Display Profile', faculty = userProfile)
-    
-        
     return
-
-    
+   
 @bp_routes.route('/edit_profile', methods = ['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -162,7 +168,5 @@ def student_edit_profile():
 @bp_routes.route("/appliedStatus/", methods = ['GET', 'POST'])
 @login_required
 def appliedStatus():
-    # appliedpost = Post.query.all()
-    # appliedStudent = Application.query.all()
     application = Application.query.all()
     return render_template('applied.html', title = 'Applied Students', applicants = application)
