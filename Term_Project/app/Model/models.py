@@ -52,6 +52,8 @@ class User(db.Model, UserMixin):
 class Student(User):
     __tablename__ = 'student'
     id = db.Column(db.ForeignKey('user.id'), primary_key=True)
+    #app_id will hold the application id that the student is assigned to
+    #app_id = db.Column(db.Integer,db.ForeignKey('application.id'))
     #Application will hold the student who applied
     applied = db.relationship('Application', backref = 'whoApplied')
     #Will display students major, gpa, gradDate, and Expierence
