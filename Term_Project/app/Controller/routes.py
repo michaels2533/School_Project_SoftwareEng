@@ -8,8 +8,8 @@ from flask_wtf.form import FlaskForm
 from config import Config
 from app import db
 
-from app.Model.models import Post, Application, Student, User
-from app.Controller.forms import FacultyEditForm, PostForm, StudentEditForm, ApplicationForm
+from app.Model.models import Post, Application, Student, User, Faculty
+from app.Controller.forms import FacultyEditForm, PostForm, StudentEditForm, ApplicationForm, SortForm
 
 
 from flask_login import current_user, login_required
@@ -33,7 +33,8 @@ def createPost():
     posts = Post.query.order_by(Post.timestamp.desc())
     if pform.validate_on_submit():
         newPost = Post(title = pform.title.data, description = pform.description.data, startDate = pform.start.data, endDate = pform.end.data, requiredTime = pform.requiredTime.data
-        , qualifications = pform.qualifications.data, facultyFirst = current_user.firstname, facultyLast = current_user.lastname, facultyEmail = current_user.email)
+        , qualifications = pform.qualifications.data, facultyFirst = current_user.firstname, facultyLast = current_user.lastname, facultyEmail = current_user.email, 
+        facultyUsername = current_user.username)
         for t in pform.researchFields.data:
             newPost.researchFields.append(t)
         db.session.add(newPost)
@@ -58,8 +59,10 @@ def createApplication(post_id, student_id):
     if aform.validate_on_submit():
         cPost = Post.query.filter_by(id = post_id).first()
         studentWhoApplied = Student.query.filter_by(id = student_id).first()
+        #applyingToFaculty = Faculty.query.filter_by(firstname = cPost.)
         #Create new application instance 
-        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data)
+        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data,
+                                     email = aform.email.data, body = aform.body.data, username = cPost.facultyUsername)
         newApplication.jobPost = cPost
         newApplication.whoApplied = studentWhoApplied
         #Saves the Application to the database
@@ -73,7 +76,7 @@ def createApplication(post_id, student_id):
 @login_required
 def display_profile(id):
     userProfile = User.query.filter_by(id = id).first()
-    applicant = Application.query.filter_by(student_id = id).first()
+    applicant = Application.query.filter_by(username = current_user.username).first()
     if userProfile.userType == "student":
         return render_template('studentDisplayProfile.html',title = 'Display Profile', student = userProfile, reference = applicant)
     if userProfile.userType == "Faculty":
@@ -169,4 +172,11 @@ def student_edit_profile():
 @login_required
 def appliedStatus():
     application = Application.query.all()
-    return render_template('applied.html', title = 'Applied Students', applicants = application)
+    sform = SortForm()
+    if sform.validate_on_submit():
+        if sform.choice.data == True:
+            application = Application.query.filter_by(username = current_user.username)
+            print(current_user.id)
+        else:
+            application = Application.query.all()
+    return render_template('applied.html', title = 'Applied Students', applicants = application, form = sform)

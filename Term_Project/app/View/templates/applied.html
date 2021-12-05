@@ -4,6 +4,20 @@
 
     <h1>Applied Status</h1>
 
+    {% if form %}
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.choice.label }}
+                {{ form.choice }}
+                <!-- Refresh Button -->
+                {{ form.refresh(class = "button" ) }}
+                
+            </div>
+        </form>
+    {% endif %}
+
+
     <table  class = "table table-hover">
         <tr valign = "center">
             <td width = "5%"> Firstname </td>

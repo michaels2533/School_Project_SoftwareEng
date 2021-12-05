@@ -1,6 +1,7 @@
 from flask.app import Flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, PasswordField, DateField
+from wtforms.fields.core import BooleanField
 from wtforms.validators import ValidationError, DataRequired, Length, Email, EqualTo
 from flask_login import current_user
 from wtforms_sqlalchemy.fields import  QuerySelectMultipleField
@@ -83,3 +84,7 @@ class StudentEditForm(EditForm):
 
 class FacultyEditForm(EditForm):
     officehours = StringField('Office Hours', validators=[DataRequired()])
+
+class SortForm(FlaskForm):
+    choice = BooleanField("Your Applicants")
+    refresh = SubmitField('Refresh')

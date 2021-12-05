@@ -141,6 +141,7 @@ class Post(db.Model):
     facultyFirst = db.Column(db.String(26))
     facultyLast = db.Column(db.String(26))
     facultyEmail = db.Column(db.String(26))
+    facultyUsername = db.Column(db.String(26))
 
     def get_tags(self):
         return self.tags
@@ -159,6 +160,9 @@ class Application(db.Model):
     #Bellow application will hold the id of the post it was applied for, as well as the id for the student who applied
     post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
     student_id = db.Column(db.Integer,db.ForeignKey('student.id'))
+    
+    #will hold the username of the faculty memeber
+    username = db.Column(db.String(26))
     
     #Holds reference's first name, last name, email, and a description for why they want the job
     firstName = db.Column(db.String(26))
