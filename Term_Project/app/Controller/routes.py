@@ -5,6 +5,7 @@ from threading import setprofile
 from flask import Blueprint
 from flask import render_template, redirect, url_for, request, flash
 from flask_wtf.form import FlaskForm
+from wtforms.widgets.core import ListWidget
 from config import Config
 from app import db
 from app.Controller.forms import PostForm, ApplicationForm, EditForm, TagForm
@@ -39,25 +40,14 @@ def index():
                 print(student_interests)
                 for post in posts:
                     for field in post.researchFields:
-                        postFields.append(field)
-                    print(postFields)
+                        if str(field) in student_interests:
+                            recommended.append(post)
+                            break
 
-                    if student_interests in postFields:
-                        print(47)
-                        recommended.append(post)
-                    
-
-                # print(student_interests)
-                # for post in posts:
-                #     for field in post.researchFields:
-                #         for tag in student.researchtopic_tag:
-                #             if field == tag:
-                #                 #recommended.append(post)
-                #                 recommended.add(post)
                 return render_template('index.html', title = 'Research Postings Portal', posts = recommended, form = rform)
 
                 
-        return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), form = rform)
+    return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), form = rform)
 
 @bp_routes.route("/createpost", methods = ['GET', 'POST'])
 @login_required
