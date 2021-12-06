@@ -49,7 +49,7 @@ def createApplication(post_id):
     if aform.validate_on_submit():
         cPost = Post.query.filter_by(id = post_id).first()
         #Create new application instance 
-        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data)
+        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data, student_id = current_user.id)
         newApplication.jobPost = cPost
         #Saves the Application to the database
         db.session.add(newApplication)
