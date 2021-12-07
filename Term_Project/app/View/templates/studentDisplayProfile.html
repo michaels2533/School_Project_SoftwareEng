@@ -13,8 +13,16 @@
     <p> <b> Programming Languages: </b> {{student.programlangauge_tag.all()}} </p> 
     <p> <b> Technical Electives: </b>{{student.elective_tag.all()}} </p> 
 
+    {% if student != current_user %}
+        <br>
+        <p> <b> Reference Name: </b> {{reference.firstName}} {{reference.lastName}} </p>
+        <p> <b> Reference Email: </b> {{reference.email}} </p>
+        <p> <b> Reason for job Search: </b> </p>
+        <p> {{reference.body}} </p>
+    {% endif %}
 
     {% if student == current_user %}
         <p><a href = " {{ url_for('routes.student_edit_profile') }} ">Edit Your Profile</a></p>
     {% endif %}
+
 {% endblock %}

@@ -8,10 +8,10 @@ from flask_wtf.form import FlaskForm
 from wtforms.widgets.core import ListWidget
 from config import Config
 from app import db
-from app.Controller.forms import PostForm, ApplicationForm, EditForm, TagForm
-from app.Model.models import Post, Application, Tag
-from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm, RecommendedSearchForm
-from app.Model.models import Post, Application, Student
+
+from app.Model.models import Post, Application, Student, User, Faculty
+from app.Controller.forms import FacultyEditForm, PostForm, RecommendedSearchForm, StudentEditForm, ApplicationForm, SortForm
+
 
 from flask_login import current_user, login_required
 
@@ -47,7 +47,9 @@ def index():
                 return render_template('index.html', title = 'Research Postings Portal', posts = recommended, form = rform)
 
                 
-    return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), form = rform)
+    # return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), form = rform)
+    user = User.query.filter_by(id = current_user.id)
+    return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), user = user, form = rform)
 
 @bp_routes.route("/createpost", methods = ['GET', 'POST'])
 @login_required
@@ -56,7 +58,8 @@ def createPost():
     posts = Post.query.order_by(Post.timestamp.desc())
     if pform.validate_on_submit():
         newPost = Post(title = pform.title.data, description = pform.description.data, startDate = pform.start.data, endDate = pform.end.data, requiredTime = pform.requiredTime.data
-        , qualifications = pform.qualifications.data, facultyFirst = current_user.firstname, facultyLast = current_user.lastname, facultyEmail = current_user.email)
+        , qualifications = pform.qualifications.data, facultyFirst = current_user.firstname, facultyLast = current_user.lastname, facultyEmail = current_user.email, 
+        facultyUsername = current_user.username)
         for t in pform.researchFields.data:
             newPost.researchFields.append(t)
         db.session.add(newPost)
@@ -65,21 +68,34 @@ def createPost():
         return redirect(url_for('routes.index'))
     return render_template('createPost.html', form = pform, posts=posts.all())
 
-@bp_routes.route("/createApplication/<post_id>", methods = ['GET', 'POST'])
+@bp_routes.route("/deletePost/<post_id>", methods = ['GET','DELETE', 'POST'])
 @login_required
-def createApplication(post_id):
+def deletePost(post_id):
+    post = Post.query.filter_by(id = post_id).first()
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your Research post has been DELETED!')
+    return redirect(url_for('routes.index'))
+
+@bp_routes.route("/createApplication/<post_id>/<student_id>", methods = ['GET', 'POST'])
+@login_required
+def createApplication(post_id, student_id):
     aform = ApplicationForm()
     if aform.validate_on_submit():
         cPost = Post.query.filter_by(id = post_id).first()
+        studentWhoApplied = Student.query.filter_by(id = student_id).first()
         #Create new application instance 
-        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data, student_id = current_user.id)
+        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data, student_id = current_user.id, username = cPost.facultyUsername)
+        # newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data,
+        #                              email = aform.email.data, body = aform.body.data, username = cPost.facultyUsername)
         newApplication.jobPost = cPost
+        newApplication.whoApplied = studentWhoApplied
         #Saves the Application to the database
         db.session.add(newApplication)
         db.session.commit()
         flash('Your Application has be submitted!')
         return redirect(url_for('routes.index'))
-    return render_template('_createApplication.html', form = aform)
+    return render_template('createApplication.html', form = aform)
 
 @bp_routes.route('/withdrawApplication/<post_id>', methods = ['GET', 'POST'])
 @login_required
@@ -96,44 +112,20 @@ def withdrawApplication(post_id):
     return redirect(url_for('routes.index'))
 
 @bp_routes.route('/addTag', methods = ['GET', 'POST'])
+@bp_routes.route('/display_profile/<uid>/<aid>', methods = ['GET'])
 @login_required
-def addTag():
-    addTag = TagForm()
-    allTags = Tag.query.all()
-    if addTag.validate_on_submit():
-        addTag = Tag(name = addTag.newField.data)
-        if allTags == []:
-            db.session.add(addTag)
-            db.session.commit()
-        for t in allTags:
-            if addTag.name == t.name:
-                flash('Already a Research Tag')
-                break     
-            else:
-                db.session.add(addTag)
-                db.session.commit()
-        return redirect(url_for('routes.display_profile'))
-    return render_template('createtag.html', form = addTag)
+def display_profile(uid,aid):
+    userProfile = User.query.filter_by(id = uid).first()
+    if int(aid) > 0: ##if not displaying application information, aid is assigned to -1 
+        application = Application.query.filter_by(id = aid).first()
 
-@bp_routes.route('/display_profile', methods = ['GET'])
-@login_required
-def display_profile():
-    if current_user.userType == "Student":
-        return redirect(url_for('routes.student_display_profile'))
-    if current_user.userType == "Faculty":
-        return redirect(url_for('routes.faculty_display_profile'))
+    #applicant = Application.query.filter_by(student_id = id).filter_by().first() # having an issue where I can sort by student, but not by post. so it prints out same reference per same student
+    if userProfile.userType == "student":
+        return render_template('studentDisplayProfile.html',title = 'Display Profile', student = userProfile, reference = application)
+    if userProfile.userType == "Faculty":
+        return render_template('facultyDisplayProfile.html',title = 'Display Profile', faculty = userProfile)
     return
-    
-@bp_routes.route('/student_display_profile', methods = ['GET'])
-@login_required
-def student_display_profile():
-    return render_template('studentDisplayProfile.html',title = 'Display Profile', student = current_user)
-
-@bp_routes.route('/faculty_display_profile', methods = ['GET'])
-@login_required
-def faculty_display_profile():
-    return render_template('facultyDisplayProfile.html',title = 'Display Profile', faculty = current_user)
-    
+   
 @bp_routes.route('/edit_profile', methods = ['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -142,7 +134,7 @@ def edit_profile():
     if current_user.userType == "faculty":
         return redirect(url_for('routes.faculty_edit_profile'))
 
-    return redirect(url_for('routes.display_profile'))
+    return redirect(url_for('routes.display_profile', id = current_user.id))
 
 @bp_routes.route('/faculty_edit_profile', methods = ['GET', 'POST'])
 @login_required
@@ -158,7 +150,7 @@ def faculty_edit_profile():
             db.session.add(current_user)
             db.session.commit()
             flash("Your changes have been saved!")
-            return redirect(url_for('routes.faculty_display_profile'))
+            return redirect(url_for('routes.display_profile', id = current_user.id))
     elif request.method == 'GET':
         #populate the user data from DB
         fform.firstname.data = current_user.firstname
@@ -195,7 +187,7 @@ def student_edit_profile():
             db.session.add(current_user)
             db.session.commit()
             flash("Your changes have been saved!")
-            return redirect(url_for('routes.student_display_profile'))
+            return redirect(url_for('routes.display_profile', id = current_user.id))
     elif request.method == 'GET':
         #populate the user data from DB
         sform.firstname.data = current_user.firstname
@@ -222,6 +214,12 @@ def student_edit_profile():
 @bp_routes.route("/appliedStatus/", methods = ['GET', 'POST'])
 @login_required
 def appliedStatus():
-    appliedpost = Post.query.all()
-    appliedStudent = Application.query.all()
-    return render_template('applied.html', title = 'Applied Students', post = appliedpost, applied = appliedStudent)
+    application = Application.query.all()
+    sform = SortForm()
+    if sform.validate_on_submit():
+        if sform.choice.data == True:
+            application = Application.query.filter_by(username = current_user.username)
+        else:
+            application = Application.query.all()
+    return render_template('applied.html', title = 'Applied Students', applicants = application, form = sform)
+# return render_template('applied.html', title = 'Applied Students', post = appliedpost, applied = appliedStudent)

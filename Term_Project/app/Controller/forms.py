@@ -1,3 +1,4 @@
+from flask.app import Flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, PasswordField, DateField
 from wtforms.fields.core import BooleanField
@@ -47,9 +48,9 @@ class PostForm(FlaskForm):
     submit = SubmitField('Post') #submit button
 
 class ApplicationForm(FlaskForm):
-    firstName = StringField('Reference First Name', validators=[DataRequired()])
-    lastName = StringField('Reference Last Name', validators=[DataRequired()])
-    email = StringField('Reference Email', validators=[DataRequired(),Email()])
+    firstName = StringField('Reference First Name',validators=[DataRequired()])
+    lastName = StringField('Reference Last Name',validators=[DataRequired()])
+    email = StringField('Reference Email',validators=[DataRequired(), Email()])
     body = TextAreaField('Why are You Interested?', validators = [DataRequired()])
     submit = SubmitField('Submit Application')
 
@@ -70,6 +71,7 @@ class EditForm(FlaskForm):
 class TagForm(FlaskForm):
     newField = StringField('New Research Field')
     submit = SubmitField('Add Tag')
+    
 class StudentEditForm(EditForm):
     major = StringField('Major', validators=[DataRequired()])
     GPA = StringField('GPA', validators=[DataRequired()])
@@ -86,3 +88,6 @@ class FacultyEditForm(EditForm):
 class RecommendedSearchForm(FlaskForm):
     boolField = BooleanField("Recommended Positions")
     refresh = SubmitField("Refresh")
+class SortForm(FlaskForm):
+    choice = BooleanField("Your Applicants")
+    refresh = SubmitField('Refresh')

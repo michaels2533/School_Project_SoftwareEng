@@ -155,6 +155,16 @@ body {
     padding: 3px;
 }
 
+.formbody {
+    width: 20%;
+    height: 200px;
+    font-style: Georgia;
+    margin: 10px 1px;
+    padding: 1px;
+    display: inline;
+  
+}
+
 .post-box {
     display: flex;
     vertical-align: middle;

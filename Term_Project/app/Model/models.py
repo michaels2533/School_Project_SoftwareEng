@@ -30,14 +30,14 @@ createTags = db.Table('createTags',
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True) #id of user
+    #Info special to every user
     username = db.Column(db.String(64))
     firstname = db.Column(db.String(64))
     lastname = db.Column(db.String(64))
     email =  db.Column(db.String(120), unique = True)
-    #WSU_ID = db.Column(db.String(64), unique = True)
     password_hash = db.Column(db.String(128))
     userType = db.Column(db.String(64))
-    posts = db.relationship('Post', backref='writer')
+    posts = db.relationship('Post', backref='writer', lazy = 'dynamic')
 
     __mapper_args__ = {
         'polymorphic_identity':'user',
@@ -50,29 +50,28 @@ class User(db.Model, UserMixin):
         self.password_hash = generate_password_hash(password)
     def get_password(self, password):
         return check_password_hash(self.password_hash, password)
-   # def get_user_posts(self):
-      #  return self.posts
+    def get_user_posts(self):
+       return self.posts
       
 class Student(User):
     __tablename__ = 'student'
     id = db.Column(db.ForeignKey('user.id'), primary_key=True)
+    #app_id will hold the application id that the student is assigned to
+    #app_id = db.Column(db.Integer,db.ForeignKey('application.id'))
+    #Application will hold the student who applied
+    applied = db.relationship('Application', backref = 'whoApplied')
+    #Will display students major, gpa, gradDate, and Expierence
     major = db.Column(db.String(64))
     GPA = db.Column(db.String(64))
     gradDate = db.Column(db.String(64))
-    #researchTopics = db.Column(db.String(64))
-    #programLanguages = db.Column(db.String(64))
     experience = db.Column(db.String(64))
-    #electives = db.Column(db.String(64))
-
+    #Will display all the Tag's the Student has available to them
     elective_tag = db.relationship("ElectiveTag", secondary = eTags, primaryjoin=(eTags.c.student_id == id), 
                                                   backref=db.backref('estudent', lazy='dynamic'), lazy='dynamic')
     programlangauge_tag = db.relationship("ProgramLanguageTag", secondary = pTags, primaryjoin=(pTags.c.student_id == id), 
                                                   backref=db.backref('pstudent', lazy='dynamic'), lazy='dynamic')
     researchtopic_tag = db.relationship("ResearchTopicTag", secondary = rTags, primaryjoin=(rTags.c.student_id == id), 
                                                   backref=db.backref('rstudent', lazy='dynamic'), lazy='dynamic')
-  
-
-
     def get_electiveTags(self):
         return self.elective_tag
     def get_programlanguageTags(self):
@@ -110,7 +109,7 @@ class ElectiveTag(db.Model):
     __tablename__ = 'electivetag'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50))
-    
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     def __repr__(self):
         return '{}'.format(self.name)
 
@@ -143,6 +142,10 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True) #holds post id
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     username = db.Column(db.String(150)) #holds username
+    
+    #Application will hold the post that it was applied for
+    applicants = db.relationship('Application', backref = 'jobPost')
+    
     #Bellow is data that will be displayed
     title = db.Column(db.String(150)) #holds post title
     description = db.Column(db.String(1500)) #holds post body
@@ -152,21 +155,31 @@ class Post(db.Model):
     requiredTime = db.Column(db.Text) # will hold required amount of time 
     qualifications = db.Column(db.String(1500)) #will hold qualifications needed for the job
     researchFields = db.relationship('Tag', secondary =  createTags, primaryjoin = (createTags.c.post_id == id), backref=db.backref('createTags', lazy='dynamic'), lazy = 'dynamic')
-    applicants = db.relationship('Application', backref = 'jobPost')
+    
     #will hold faculty first name / last name
     facultyFirst = db.Column(db.String(26))
     facultyLast = db.Column(db.String(26))
     facultyEmail = db.Column(db.String(26))
+    facultyUsername = db.Column(db.String(26))
 
     def get_tags(self):
-        return self.tags
+        return self.researchFields
     
    
 
 
 
 class Application(db.Model):
+    #Holds the id for a post that it was applied for
     id = db.Column(db.Integer, primary_key=True)
+    #Bellow application will hold the id of the post it was applied for, as well as the id for the student who applied
+    post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
+    student_id = db.Column(db.Integer,db.ForeignKey('student.id'))
+    
+    #will hold the username of the faculty memeber
+    username = db.Column(db.String(26))
+    
+    #Holds reference's first name, last name, email, and a description for why they want the job
     firstName = db.Column(db.String(26))
     lastName = db.Column(db.String(26))
     email = db.Column(db.String(120))

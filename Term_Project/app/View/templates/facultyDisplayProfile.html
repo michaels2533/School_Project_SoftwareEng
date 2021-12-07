@@ -7,7 +7,7 @@
     <p> <b> Last Name: </b> {{faculty.lastname }} </p>
     <p> <b> Email: </b> {{faculty.email }} </p>
     <p> <b>Office Hours: </b> {{faculty.officehours}} </p>
-    {% if student == current_user %}
+    {% if faculty == current_user %}
         <p><a href = " {{ url_for('routes.faculty_edit_profile') }} ">Edit Your Profile</a></p>
     {% endif %}
 {% endblock %}

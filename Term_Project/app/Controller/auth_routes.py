@@ -20,22 +20,22 @@ def register():
     if rform.validate_on_submit():
         if(User.query.filter_by(email = rform.email.data).count() < 1):
             if rform.userType.data == "Student":
-                studentUser = Student(username = rform.username.data, email = rform.email.data)
+                studentUser = Student(username = rform.username.data, firstname = rform.firstname.data, lastname = rform.lastname.data, email = rform.email.data)
                 studentUser.set_password(rform.password.data)
                 db.session.add(studentUser)
                 db.session.commit()
                 flash("Congrats, you are now registered!")
                 login_user(studentUser)
-                return redirect(url_for('routes.student_edit_profile'))
+                return redirect(url_for('routes.edit_profile'))
 
             if rform.userType.data == "Faculty":
-                facultyUser = Faculty(username = rform.username.data, email = rform.email.data)
+                facultyUser = Faculty(username = rform.username.data, firstname = rform.firstname.data, lastname = rform.lastname.data, email = rform.email.data)
                 facultyUser.set_password(rform.password.data)
                 db.session.add(facultyUser)
                 db.session.commit()
                 flash("Congrats, you are now registered!")
                 login_user(facultyUser)
-                return redirect(url_for('routes.faculty_edit_profile'))
+                return redirect(url_for('routes.edit_profile'))
         else:
             flash('The email address you selected is already in use')
 
