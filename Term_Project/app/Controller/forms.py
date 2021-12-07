@@ -1,4 +1,3 @@
-#from Term_Project.app.Model.models import Application
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, PasswordField, DateField
 from wtforms.validators import ValidationError, DataRequired, Length, Email, EqualTo

@@ -4,7 +4,6 @@ import sys
 from threading import setprofile
 from flask import Blueprint
 from flask import render_template, redirect, url_for, request, flash
-#from Term_Project.app.Controller.forms import ApplicationStatusForm
 from flask_wtf.form import FlaskForm
 from config import Config
 from app import db
