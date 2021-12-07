@@ -80,6 +80,17 @@ class Student(User):
     def get_researchtopicTags(self):
         return self.researchtopic_tag
 
+    def isApplied(self, newJob):
+        print(Application.query.filter_by(post_id=newJob.id).all())
+        print(Application.query.filter_by(student_id = self.id).all())
+        return (Application.query.filter_by(post_id=newJob.id).filter_by(student_id = self.id).count())
+
+    def withdraw(self, post):
+        if self.isApplied(post):
+            status =  Application.query.filter_by(student_id=self.id).filter_by(post_id=post.id).first()
+            db.session.delete(status)
+            db.session.commit()
+
     __mapper_args__ = {
         'polymorphic_identity':'student'
     }
@@ -161,5 +172,8 @@ class Application(db.Model):
     email = db.Column(db.String(120))
     body = db.Column(db.String(1500))
     post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
+    def __repr__(self):
+        return '{} - {} - {}'.format(self.id, self.post_id, self.student_id)
 
 

@@ -72,7 +72,7 @@ def createApplication(post_id):
     if aform.validate_on_submit():
         cPost = Post.query.filter_by(id = post_id).first()
         #Create new application instance 
-        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data)
+        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data, student_id = current_user.id)
         newApplication.jobPost = cPost
         #Saves the Application to the database
         db.session.add(newApplication)
@@ -80,6 +80,20 @@ def createApplication(post_id):
         flash('Your Application has be submitted!')
         return redirect(url_for('routes.index'))
     return render_template('_createApplication.html', form = aform)
+
+@bp_routes.route('/withdrawApplication/<post_id>', methods = ['GET', 'POST'])
+@login_required
+def withdrawApplication(post_id):
+    post = Post.query.filter_by(id=post_id).first()
+
+    if post is None:
+        flash('Class with id "{}" not found.'.format(post_id))
+        return redirect(url_for('routes.index'))
+
+    current_user.withdraw(post)
+    db.session.commit()
+    flash('You have withdrew your application from {}!'.format(post.title))
+    return redirect(url_for('routes.index'))
 
 @bp_routes.route('/addTag', methods = ['GET', 'POST'])
 @login_required
