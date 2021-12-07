@@ -7,7 +7,7 @@ from flask_login import current_user
 from wtforms_sqlalchemy.fields import  QuerySelectMultipleField
 from wtforms.widgets import ListWidget, CheckboxInput
 from wtforms.widgets.core import CheckboxInput, ListWidget
-from app.Model.models import Faculty, ProgramLanguageTag, ResearchTopicTag, User, ElectiveTag
+from app.Model.models import Faculty, ProgramLanguageTag, ResearchTopicTag, User, ElectiveTag, Application
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 from wtforms import widgets
 
@@ -18,7 +18,6 @@ def queryFactory():
     return Tag.query.all()
 def getLabel(tagName):
     return tagName.name
-
 
 def queryFactoryElectiveTag():
     return ElectiveTag.query.all()
@@ -91,3 +90,7 @@ class RecommendedSearchForm(FlaskForm):
 class SortForm(FlaskForm):
     choice = BooleanField("Your Applicants")
     refresh = SubmitField('Refresh')
+class ApplicationStatusForm(FlaskForm):
+    mychoices = ['Hired', 'Not Hired']
+    statusfield = SelectField('Status', choices = mychoices, validators = [DataRequired()])
+    submit = SubmitField('Update')

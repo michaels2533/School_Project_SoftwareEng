@@ -66,6 +66,9 @@ class Student(User):
     gradDate = db.Column(db.String(64))
     experience = db.Column(db.String(64))
     #Will display all the Tag's the Student has available to them
+    #electives = db.Column(db.String(64))
+    applications = db.relationship('Application', backref = 'writer')
+
     elective_tag = db.relationship("ElectiveTag", secondary = eTags, primaryjoin=(eTags.c.student_id == id), 
                                                   backref=db.backref('estudent', lazy='dynamic'), lazy='dynamic')
     programlangauge_tag = db.relationship("ProgramLanguageTag", secondary = pTags, primaryjoin=(pTags.c.student_id == id), 
@@ -184,6 +187,8 @@ class Application(db.Model):
     lastName = db.Column(db.String(26))
     email = db.Column(db.String(120))
     body = db.Column(db.String(1500))
+    appStatus = db.Column(db.String(1500))
+    approved = db.Column(db.Boolean,default = False)
     post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
     def __repr__(self):

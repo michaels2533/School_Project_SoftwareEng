@@ -30,6 +30,10 @@
 
     {% for applicant in applicants %}
         {% include '_applied.html' %}
+    <!-- {% for postname in post %}
+        {% for student in postname.applicants %}
+                {% include '_applied.html' %}
+        {% endfor %} -->
     {% endfor %}
 
 {% endblock %}

@@ -8,10 +8,10 @@ from flask_wtf.form import FlaskForm
 from wtforms.widgets.core import ListWidget
 from config import Config
 from app import db
-
-from app.Model.models import Post, Application, Student, User, Faculty
-from app.Controller.forms import FacultyEditForm, PostForm, RecommendedSearchForm, StudentEditForm, ApplicationForm, SortForm
-
+from app.Controller.forms import PostForm, ApplicationForm, EditForm, RecommendedSearchForm, SortForm, TagForm
+from app.Model.models import Post, Application, Student, Tag, User
+from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm, ApplicationStatusForm
+from app.Model.models import Post, Application
 
 from flask_login import current_user, login_required
 
@@ -85,11 +85,12 @@ def createApplication(post_id, student_id):
         cPost = Post.query.filter_by(id = post_id).first()
         studentWhoApplied = Student.query.filter_by(id = student_id).first()
         #Create new application instance 
-        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data, student_id = current_user.id, username = cPost.facultyUsername)
+        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data, student_id = current_user.id, username = cPost.facultyUsername, appStatus = 'Pending')
         # newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data,
         #                              email = aform.email.data, body = aform.body.data, username = cPost.facultyUsername)
         newApplication.jobPost = cPost
         newApplication.whoApplied = studentWhoApplied
+        newApplication.writer = current_user; 
         #Saves the Application to the database
         db.session.add(newApplication)
         db.session.commit()
@@ -211,7 +212,7 @@ def student_edit_profile():
         pass
     return render_template('studentEditProfile.html', title = 'Edit Profile', form = sform)
 
-@bp_routes.route("/appliedStatus/", methods = ['GET', 'POST'])
+@bp_routes.route("/appliedStatus/<id>", methods = ['GET', 'POST'])
 @login_required
 def appliedStatus():
     application = Application.query.all()
@@ -222,4 +223,30 @@ def appliedStatus():
         else:
             application = Application.query.all()
     return render_template('applied.html', title = 'Applied Students', applicants = application, form = sform)
+    
 # return render_template('applied.html', title = 'Applied Students', post = appliedpost, applied = appliedStudent)
+# def appliedStatus(id):
+#     aform = ApplicationStatusForm()
+#     appliedStudent = []
+#     appliedpost = Post.query.filter_by(facultyEmail = current_user.email).all()
+#     if request.method == 'POST':
+#         qApp = Application.query.filter_by(id = id).first() 
+#         qApp.appStatus = aform.statusfield.data
+#         db.session.commit()
+
+#     return render_template('applied.html', title = 'Applied Students', post = appliedpost, form = aform)
+
+@bp_routes.route("/applicationStatus/<id>", methods = ['GET', 'POST'])
+@login_required
+def applicationStatus(id):
+    studentApp = Application.query.filter_by(writer = current_user).all()
+    return render_template('application.html', title = 'Open Applications', activeApps = studentApp)
+
+@bp_routes.route("/updateApplication/<id>", methods = ['POST'])
+@login_required
+def updateApplication(id):
+     qApp = Application.query.filter_by(id = id).first() 
+     qApp.appStatus = 'Approved for interview'
+     qApp.approved = True
+     db.session.commit()
+     return redirect(url_for('routes.appliedStatus', id = id))

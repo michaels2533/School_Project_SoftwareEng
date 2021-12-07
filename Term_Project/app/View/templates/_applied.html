@@ -5,7 +5,51 @@
             <td width = "25%"> {{applicant.whoApplied.lastname}} </td>
             <td width = "10%"> {{applicant.jobPost.facultyFirst}} {{applicant.jobPost.facultyLast}}</td>
             <td width = "30%"> {{applicant.jobPost.title}} </td>
-            <td width = "15%"> Applied </td>
+
+            <td width = "15%">
+                <div class = 'mb-2'>
+                {{ applicant.whoApplied.appStatus }}
+                </div>
+                {% if form %}
+                {{ form.hidden_tag() }}
+                <form action = "{{ url_for('routes.appliedStatus', id = applicant.id) }}"  method = 'POST'>
+                    {{ form.statusfield(class = 'form-select') }}
+                    {{ form.submit(class="btn btn-secondary")}}
+                </form>
+                {% endif %}
+            </td>
+            {% if student.approved != True %}
+            <td width = "15%"> 
+                {% if form %}
+                {{ form.hidden_tag() }}
+                <form action = "{{ url_for('routes.updateApplication', id = applicant.id) }}"  method = 'POST'>
+                    <input type= "submit" value = 'Accept' class = 'btn btn-secondary'>
+                </form>
+                {% endif %}
+            </td>
+            {% endif %}            <td width = "20%">
+                <div class = 'mb-2'>
+                {{ applicant.whoApplied.appStatus }}
+                </div>
+                {% if form %}
+                {{ form.hidden_tag() }}
+                <form action = "{{ url_for('routes.appliedStatus', id = applicant.id) }}"  method = 'POST'>
+                    {{ form.statusfield(class = 'form-select') }}
+                    {{ form.submit(class="btn btn-secondary")}}
+                </form>
+                {% endif %}
+            </td>
+            {% if student.approved != True %}
+            <td width = "15%"> 
+                {% if form %}
+                {{ form.hidden_tag() }}
+                <form action = "{{ url_for('routes.updateApplication', id = applicant.id) }}"  method = 'POST'>
+                    <input type= "submit" value = 'Accept' class = 'btn btn-secondary'>
+                </form>
+                {% endif %}
+            </td>
+            {% endif %}
+
             <td width = "15%"> 
                 <a href = "{{ url_for('routes.display_profile', uid = applicant.whoApplied.id, aid = applicant.id) }}"> Student Profile </a>
             </td> 
