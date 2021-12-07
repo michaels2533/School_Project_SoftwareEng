@@ -71,13 +71,16 @@ def createApplication(post_id, student_id):
         return redirect(url_for('routes.index'))
     return render_template('createApplication.html', form = aform)
 
-@bp_routes.route('/display_profile/<id>', methods = ['GET'])
+@bp_routes.route('/display_profile/<uid>/<aid>', methods = ['GET'])
 @login_required
-def display_profile(id):
-    userProfile = User.query.filter_by(id = id).first()
-    applicant = Application.query.filter_by(student_id = id).first() # having an issue where I can sort by student, but not by post. so it prints out same reference per same student
+def display_profile(uid,aid):
+    userProfile = User.query.filter_by(id = uid).first()
+    if int(aid) > 0: ##if not displaying application information, aid is assigned to -1 
+        application = Application.query.filter_by(id = aid).first()
+
+    #applicant = Application.query.filter_by(student_id = id).filter_by().first() # having an issue where I can sort by student, but not by post. so it prints out same reference per same student
     if userProfile.userType == "student":
-        return render_template('studentDisplayProfile.html',title = 'Display Profile', student = userProfile, reference = applicant)
+        return render_template('studentDisplayProfile.html',title = 'Display Profile', student = userProfile, reference = application)
     if userProfile.userType == "Faculty":
         return render_template('facultyDisplayProfile.html',title = 'Display Profile', faculty = userProfile)
     return

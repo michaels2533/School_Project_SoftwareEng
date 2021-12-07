@@ -47,13 +47,13 @@
                     
                     {% if current_user.userType == "student" %}
                     <li class="nav-item  mx-2">
-                        <a class="nav-link" href="{{ url_for('routes.display_profile', id = current_user.id) }}">Profile</a>
+                        <a class="nav-link" href="{{ url_for('routes.display_profile', uid = current_user.id, aid = -1) }}">Profile</a>
                     </li>
                     {% endif %}
 
                     {% if current_user.userType == "Faculty" %}
                     <li class="nav-item  mx-2">
-                        <a class="nav-link" href="{{ url_for('routes.display_profile', id = current_user.id) }}">Profile</a>
+                        <a class="nav-link" href="{{ url_for('routes.display_profile', uid = current_user.id, aid = -1) }}">Profile</a>
                     </li>
                     {% endif %}
 

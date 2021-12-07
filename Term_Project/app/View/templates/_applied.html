@@ -7,7 +7,7 @@
             <td width = "30%"> {{applicant.jobPost.title}} </td>
             <td width = "15%"> Applied </td>
             <td width = "15%"> 
-                <a href = "{{ url_for('routes.display_profile', id = applicant.whoApplied.id) }}"> Student Profile </a>
+                <a href = "{{ url_for('routes.display_profile', uid = applicant.whoApplied.id, aid = applicant.id) }}"> Student Profile </a>
             </td> 
     </tr>
 
