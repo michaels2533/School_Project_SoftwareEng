@@ -33,7 +33,6 @@ class User(db.Model, UserMixin):
     #WSU_ID = db.Column(db.String(64), unique = True)
     password_hash = db.Column(db.String(128))
     userType = db.Column(db.String(64))
-    posts = db.relationship('Post', backref='writer')
 
     __mapper_args__ = {
         'polymorphic_identity':'user',
@@ -59,6 +58,7 @@ class Student(User):
     #programLanguages = db.Column(db.String(64))
     experience = db.Column(db.String(64))
     #electives = db.Column(db.String(64))
+    applications = db.relationship('Application', backref = 'writer')
 
     elective_tag = db.relationship("ElectiveTag", secondary = eTags, primaryjoin=(eTags.c.student_id == id), 
                                                   backref=db.backref('estudent', lazy='dynamic'), lazy='dynamic')
@@ -156,6 +156,9 @@ class Application(db.Model):
     lastName = db.Column(db.String(26))
     email = db.Column(db.String(120))
     body = db.Column(db.String(1500))
+    appStatus = db.Column(db.String(1500))
+    approved = db.Column(db.Boolean,default = False)
     post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
+    student_id = db.Column(db.Integer,db.ForeignKey('student.id'))
 
 

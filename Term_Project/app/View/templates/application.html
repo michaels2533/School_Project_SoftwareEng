@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h1>Applied Status</h1>
+    <h1>Open Applications</h1>
 
     <table  class = "table table-hover">
         <tr valign = "center">
@@ -13,10 +13,8 @@
             <td width = "30%"> Status </td>
         </tr>
     </table>
-    {% for postname in post %}
-        {% for student in postname.applicants %}
-                {% include '_applied.html' %}
-        {% endfor %}
+    {% for student in activeApps %}  
+            {% include '_application.html' %}
     {% endfor %}
 
 {% endblock %}

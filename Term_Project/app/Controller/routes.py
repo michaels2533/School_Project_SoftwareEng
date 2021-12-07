@@ -4,12 +4,13 @@ import sys
 from threading import setprofile
 from flask import Blueprint
 from flask import render_template, redirect, url_for, request, flash
+#from Term_Project.app.Controller.forms import ApplicationStatusForm
 from flask_wtf.form import FlaskForm
 from config import Config
 from app import db
 from app.Controller.forms import PostForm, ApplicationForm, EditForm, TagForm
 from app.Model.models import Post, Application, Tag
-from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm
+from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm, ApplicationStatusForm
 from app.Model.models import Post, Application
 
 from flask_login import current_user, login_required
@@ -49,8 +50,9 @@ def createApplication(post_id):
     if aform.validate_on_submit():
         cPost = Post.query.filter_by(id = post_id).first()
         #Create new application instance 
-        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data)
+        newApplication = Application(firstName = aform.firstName.data, lastName = aform.lastName.data, email = aform.email.data, body = aform.body.data, appStatus = 'Pending')
         newApplication.jobPost = cPost
+        newApplication.writer = current_user; 
         #Saves the Application to the database
         db.session.add(newApplication)
         db.session.commit()
@@ -182,9 +184,30 @@ def student_edit_profile():
         pass
     return render_template('studentEditProfile.html', title = 'Edit Profile', form = sform)
 
-@bp_routes.route("/appliedStatus/", methods = ['GET', 'POST'])
+@bp_routes.route("/appliedStatus/<id>", methods = ['GET', 'POST'])
 @login_required
-def appliedStatus():
-    appliedpost = Post.query.all()
-    appliedStudent = Application.query.all()
-    return render_template('applied.html', title = 'Applied Students', post = appliedpost, applied = appliedStudent)
+def appliedStatus(id):
+    aform = ApplicationStatusForm()
+    appliedStudent = []
+    appliedpost = Post.query.filter_by(facultyEmail = current_user.email).all()
+    if request.method == 'POST':
+        qApp = Application.query.filter_by(id = id).first() 
+        qApp.appStatus = aform.statusfield.data
+        db.session.commit()
+
+    return render_template('applied.html', title = 'Applied Students', post = appliedpost, form = aform)
+
+@bp_routes.route("/applicationStatus/<id>", methods = ['GET', 'POST'])
+@login_required
+def applicationStatus(id):
+    studentApp = Application.query.filter_by(writer = current_user).all()
+    return render_template('application.html', title = 'Open Applications', activeApps = studentApp)
+
+@bp_routes.route("/updateApplication/<id>", methods = ['POST'])
+@login_required
+def updateApplication(id):
+     qApp = Application.query.filter_by(id = id).first() 
+     qApp.appStatus = 'Approved for interview'
+     qApp.approved = True
+     db.session.commit()
+     return redirect(url_for('routes.appliedStatus', id = id))

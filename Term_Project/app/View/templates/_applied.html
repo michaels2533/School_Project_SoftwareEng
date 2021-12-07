@@ -5,7 +5,28 @@
             <td width = "25%"> {{student.lastName}} </td>
             <td width = "10%"> {{postname.facultyFirst}} {{postname.facultyLast}}</td>
             <td width = "30%"> {{postname.title}} </td>
-            <td width = "30%"> Applied </td>
+            <td width = "20%">
+                <div class = 'mb-2'>
+                {{ student.appStatus }}
+                </div>
+                {% if form %}
+                {{ form.hidden_tag() }}
+                <form action = "{{ url_for('routes.appliedStatus', id = student.id) }}"  method = 'POST'>
+                    {{ form.statusfield(class = 'form-select') }}
+                    {{ form.submit(class="btn btn-secondary")}}
+                </form>
+                {% endif %}
+            </td>
+            {% if student.approved != True %}
+            <td width = "10%"> 
+                {% if form %}
+                {{ form.hidden_tag() }}
+                <form action = "{{ url_for('routes.updateApplication', id = student.id) }}"  method = 'POST'>
+                    <input type= "submit" value = 'Accept' class = 'btn btn-secondary'>
+                </form>
+                {% endif %}
+            </td>
+            {% endif %}
     </tr>
 
 </table>

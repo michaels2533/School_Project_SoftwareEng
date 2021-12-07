@@ -1,3 +1,4 @@
+#from Term_Project.app.Model.models import Application
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, PasswordField, DateField
 from wtforms.validators import ValidationError, DataRequired, Length, Email, EqualTo
@@ -5,7 +6,7 @@ from flask_login import current_user
 from wtforms_sqlalchemy.fields import  QuerySelectMultipleField
 from wtforms.widgets import ListWidget, CheckboxInput
 from wtforms.widgets.core import CheckboxInput, ListWidget
-from app.Model.models import Faculty, ProgramLanguageTag, ResearchTopicTag, User, ElectiveTag
+from app.Model.models import Faculty, ProgramLanguageTag, ResearchTopicTag, User, ElectiveTag, Application
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 from wtforms import widgets
 
@@ -16,7 +17,6 @@ def queryFactory():
     return Tag.query.all()
 def getLabel(tagName):
     return tagName.name
-
 
 def queryFactoryElectiveTag():
     return ElectiveTag.query.all()
@@ -81,3 +81,8 @@ class StudentEditForm(EditForm):
 
 class FacultyEditForm(EditForm):
     officehours = StringField('Office Hours', validators=[DataRequired()])
+
+class ApplicationStatusForm(FlaskForm):
+    mychoices = ['Hired', 'Not Hired']
+    statusfield = SelectField('Status', choices = mychoices, validators = [DataRequired()])
+    submit = SubmitField('Update')
