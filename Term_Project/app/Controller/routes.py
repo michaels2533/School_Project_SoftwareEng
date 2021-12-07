@@ -5,12 +5,13 @@ from threading import setprofile
 from flask import Blueprint
 from flask import render_template, redirect, url_for, request, flash
 from flask_wtf.form import FlaskForm
+from wtforms.widgets.core import ListWidget
 from config import Config
 from app import db
 from app.Controller.forms import PostForm, ApplicationForm, EditForm, TagForm
 from app.Model.models import Post, Application, Tag
-from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm
-from app.Model.models import Post, Application
+from app.Controller.forms import FacultyEditForm, PostForm, ApplicationForm, EditForm, StudentEditForm, RecommendedSearchForm
+from app.Model.models import Post, Application, Student
 
 from flask_login import current_user, login_required
 
@@ -23,8 +24,30 @@ bp_routes.template_folder = Config.TEMPLATE_FOLDER #'..\\View\\templates'
 @login_required
 def index():
     posts = Post.query.order_by(Post.timestamp.desc())
+    rform = RecommendedSearchForm()
+    if current_user.userType == "student":
 
-    return render_template('index.html', title = 'Research Postings Portal', posts = posts.all())
+        if rform.validate_on_submit():
+
+            if rform.boolField.data == True:
+                recommended = []
+                postFields = []
+
+                # student = Student.query.filter_by(id = current_user.id).first()
+
+                student_interests = [ rt.name for rt in current_user.researchtopic_tag.all()]
+                
+                print(student_interests)
+                for post in posts:
+                    for field in post.researchFields:
+                        if str(field) in student_interests:
+                            recommended.append(post)
+                            break
+
+                return render_template('index.html', title = 'Research Postings Portal', posts = recommended, form = rform)
+
+                
+    return render_template('index.html', title = 'Research Postings Portal', posts = posts.all(), form = rform)
 
 @bp_routes.route("/createpost", methods = ['GET', 'POST'])
 @login_required
