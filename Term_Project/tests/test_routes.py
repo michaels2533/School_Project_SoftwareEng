@@ -11,6 +11,7 @@ from app import create_app, db
 from app.Model.models import User, Post, Tag, ElectiveTag, ResearchTopicTag, User, ProgramLanguageTag
 from config import Config
 
+import unittest
 
 class TestConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite://'

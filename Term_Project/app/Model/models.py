@@ -33,7 +33,7 @@ class User(db.Model, UserMixin):
     email =  db.Column(db.String(120), unique = True)
     password_hash = db.Column(db.String(128))
     userType = db.Column(db.String(64))
-    posts = db.relationship('Post', backref='writer')
+    posts = db.relationship('Post', backref='writer', lazy = 'dynamic')
 
     __mapper_args__ = {
         'polymorphic_identity':'user',
@@ -46,8 +46,8 @@ class User(db.Model, UserMixin):
         self.password_hash = generate_password_hash(password)
     def get_password(self, password):
         return check_password_hash(self.password_hash, password)
-   # def get_user_posts(self):
-      #  return self.posts
+    def get_user_posts(self):
+       return self.posts
       
 class Student(User):
     __tablename__ = 'student'
@@ -146,7 +146,7 @@ class Post(db.Model):
     facultyUsername = db.Column(db.String(26))
 
     def get_tags(self):
-        return self.tags
+        return self.researchFields
     
    
 class Tag(db.Model):
