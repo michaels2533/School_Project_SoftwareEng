@@ -111,10 +111,10 @@ def withdrawApplication(post_id):
     flash('You have withdrew your application from {}!'.format(post.title))
     return redirect(url_for('routes.index'))
 
-@bp_routes.route('/addTag', methods = ['GET', 'POST'])
 @bp_routes.route('/display_profile/<uid>/<aid>', methods = ['GET'])
 @login_required
 def display_profile(uid,aid):
+    application = Application.query.all()
     userProfile = User.query.filter_by(id = uid).first()
     if int(aid) > 0: ##if not displaying application information, aid is assigned to -1 
         application = Application.query.filter_by(id = aid).first()
@@ -134,7 +134,7 @@ def edit_profile():
     if current_user.userType == "faculty":
         return redirect(url_for('routes.faculty_edit_profile'))
 
-    return redirect(url_for('routes.display_profile', id = current_user.id))
+    return redirect(url_for('routes.display_profile', uid = current_user.id, aid = -1))
 
 @bp_routes.route('/faculty_edit_profile', methods = ['GET', 'POST'])
 @login_required
@@ -150,7 +150,7 @@ def faculty_edit_profile():
             db.session.add(current_user)
             db.session.commit()
             flash("Your changes have been saved!")
-            return redirect(url_for('routes.display_profile', id = current_user.id))
+            return redirect(url_for('routes.display_profile', uid = current_user.id, aid = -1))
     elif request.method == 'GET':
         #populate the user data from DB
         fform.firstname.data = current_user.firstname
@@ -187,7 +187,7 @@ def student_edit_profile():
             db.session.add(current_user)
             db.session.commit()
             flash("Your changes have been saved!")
-            return redirect(url_for('routes.display_profile', id = current_user.id))
+            return redirect(url_for('routes.display_profile', uid = current_user.id, aid = -1))
     elif request.method == 'GET':
         #populate the user data from DB
         sform.firstname.data = current_user.firstname
