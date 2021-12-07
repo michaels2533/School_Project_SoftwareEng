@@ -64,12 +64,12 @@
                             <a class="nav-link" href="{{ url_for('routes.createPost') }}">Create Post</a>
                           </li>
                           <li class="nav-item  mx-2">
-                            <a class="nav-link" href="{{ url_for('routes.appliedStatus', id = current_user.id) }}">Applicants</a>
+                            <a class="nav-link" href="{{ url_for('routes.appliedStatus', id = current_user.id, aid = -1) }}">Applicants</a>
                         </li>
                     {% endif %}
                     {% if current_user.userType == "student" %}
                           <li class="nav-item  mx-2">
-                            <a class="nav-link" href="{{ url_for('routes.applicationStatus', id = current_user.id) }}">Applications</a>
+                            <a class="nav-link" href="{{ url_for('routes.applicationStatus') }}">Applied For</a>
                         </li>
                     {% endif %}
                         <li class="nav-item  mx-2">

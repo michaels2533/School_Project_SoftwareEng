@@ -212,41 +212,33 @@ def student_edit_profile():
         pass
     return render_template('studentEditProfile.html', title = 'Edit Profile', form = sform)
 
-@bp_routes.route("/appliedStatus/<id>", methods = ['GET', 'POST'])
+@bp_routes.route("/appliedStatus/<aid>", methods = ['GET', 'POST'])
 @login_required
-def appliedStatus():
+def appliedStatus(aid):
+    aform = ApplicationStatusForm()
     application = Application.query.all()
     sform = SortForm()
-    if sform.validate_on_submit():
+    if request.method == 'POST':
         if sform.choice.data == True:
             application = Application.query.filter_by(username = current_user.username)
-        else:
-            application = Application.query.all()
-    return render_template('applied.html', title = 'Applied Students', applicants = application, form = sform)
-    
-# return render_template('applied.html', title = 'Applied Students', post = appliedpost, applied = appliedStudent)
-# def appliedStatus(id):
-#     aform = ApplicationStatusForm()
-#     appliedStudent = []
-#     appliedpost = Post.query.filter_by(facultyEmail = current_user.email).all()
-#     if request.method == 'POST':
-#         qApp = Application.query.filter_by(id = id).first() 
-#         qApp.appStatus = aform.statusfield.data
-#         db.session.commit()
+        qApp = Application.query.filter_by(id = aid).first() 
+        qApp.appStatus = aform.statusfield.data
+        db.session.commit()
+    return render_template('applied.html', title = 'Applied Students', applicants = application, form = sform, aform = aform)
 
-#     return render_template('applied.html', title = 'Applied Students', post = appliedpost, form = aform)
-
-@bp_routes.route("/applicationStatus/<id>", methods = ['GET', 'POST'])
+#This is for student
+@bp_routes.route("/applicationStatus/", methods = ['GET', 'POST'])
 @login_required
-def applicationStatus(id):
-    studentApp = Application.query.filter_by(writer = current_user).all()
-    return render_template('application.html', title = 'Open Applications', activeApps = studentApp)
+def applicationStatus():
+    application = Application.query.filter_by(writer = current_user).all()
+    return render_template('application.html', title = 'Open Applications', applicant = application)
 
-@bp_routes.route("/updateApplication/<id>", methods = ['POST'])
+#This is for faculty
+@bp_routes.route("/updateApplication/<aid>", methods = ['POST'])
 @login_required
-def updateApplication(id):
-     qApp = Application.query.filter_by(id = id).first() 
+def updateApplication(aid):
+     qApp = Application.query.filter_by(id = aid).first() 
      qApp.appStatus = 'Approved for interview'
      qApp.approved = True
      db.session.commit()
-     return redirect(url_for('routes.appliedStatus', id = id))
+     return redirect(url_for('routes.appliedStatus', aid = aid))

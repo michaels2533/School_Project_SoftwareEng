@@ -1,58 +1,46 @@
 <table class = "table table-hover">
     
-    <tr valign = "center">
+    {% if applicant.jobPost != None %}
+
+        <tr valign = "center">
             <td width = "5%"> {{applicant.whoApplied.firstname}} </td>
             <td width = "25%"> {{applicant.whoApplied.lastname}} </td>
             <td width = "10%"> {{applicant.jobPost.facultyFirst}} {{applicant.jobPost.facultyLast}}</td>
             <td width = "30%"> {{applicant.jobPost.title}} </td>
 
-            <td width = "15%">
-                <div class = 'mb-2'>
-                {{ applicant.whoApplied.appStatus }}
-                </div>
-                {% if form %}
-                {{ form.hidden_tag() }}
-                <form action = "{{ url_for('routes.appliedStatus', id = applicant.id) }}"  method = 'POST'>
-                    {{ form.statusfield(class = 'form-select') }}
-                    {{ form.submit(class="btn btn-secondary")}}
-                </form>
+            {%if aform %}
+                
+                {% if applicant.approved %}
+                    <td width = "15%">
+                        <div class = 'mb-2'>
+                        {{ applicant.appStatus }}
+                        </div>
+                        <!-- This is the button for faculty to update student stuff -->
+                        <form action = "{{ url_for('routes.appliedStatus', aid = applicant.id) }}"  method = 'POST'>
+                            {{ aform.statusfield(class = 'form-select') }}
+                            {{ aform.submit(class="btn btn-secondary")}}
+                        </form>
+                    </td>
                 {% endif %}
-            </td>
-            {% if student.approved != True %}
-            <td width = "15%"> 
-                {% if form %}
-                {{ form.hidden_tag() }}
-                <form action = "{{ url_for('routes.updateApplication', id = applicant.id) }}"  method = 'POST'>
-                    <input type= "submit" value = 'Accept' class = 'btn btn-secondary'>
-                </form>
+                {% if applicant.approved != True %}
+                    <td width = "15%"> 
+                        <!-- This button will be displayed if faculty wants to accept for interview -->
+                        <form action = "{{ url_for('routes.updateApplication', aid = applicant.id) }}"  method = 'POST'>
+                            <input type= "submit" value = 'Accept For Interview' class = 'btn btn-secondary'>
+                        </form>
+                    </td>
                 {% endif %}
-            </td>
-            {% endif %}            <td width = "20%">
-                <div class = 'mb-2'>
-                {{ applicant.whoApplied.appStatus }}
-                </div>
-                {% if form %}
-                {{ form.hidden_tag() }}
-                <form action = "{{ url_for('routes.appliedStatus', id = applicant.id) }}"  method = 'POST'>
-                    {{ form.statusfield(class = 'form-select') }}
-                    {{ form.submit(class="btn btn-secondary")}}
-                </form>
-                {% endif %}
-            </td>
-            {% if student.approved != True %}
-            <td width = "15%"> 
-                {% if form %}
-                {{ form.hidden_tag() }}
-                <form action = "{{ url_for('routes.updateApplication', id = applicant.id) }}"  method = 'POST'>
-                    <input type= "submit" value = 'Accept' class = 'btn btn-secondary'>
-                </form>
-                {% endif %}
-            </td>
+            
             {% endif %}
 
+
             <td width = "15%"> 
-                <a href = "{{ url_for('routes.display_profile', uid = applicant.whoApplied.id, aid = applicant.id) }}"> Student Profile </a>
+                <form action = "{{ url_for('routes.display_profile', uid = applicant.whoApplied.id, aid = applicant.id) }}"  method = 'GET'>
+                    <input type= "submit" value = 'Student Profile' class = 'btn btn-secondary'>
+                </form>
             </td> 
-    </tr>
+        </tr>
+
+    {% endif %}
 
 </table>

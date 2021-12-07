@@ -24,16 +24,14 @@
             <td width = "25%"> Lastname </td>
             <td width = "10%"> Faculty Member </td>
             <td width = "30%"> Job Title </td>
-            <td width = "30%"> Status </td>
+            <td width = "15%"> Status </td>
+            <td width = "15%"> Student Info </td>
         </tr>
     </table>
 
     {% for applicant in applicants %}
         {% include '_applied.html' %}
-    <!-- {% for postname in post %}
-        {% for student in postname.applicants %}
-                {% include '_applied.html' %}
-        {% endfor %} -->
+        
     {% endfor %}
 
 {% endblock %}
