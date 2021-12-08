@@ -116,10 +116,10 @@ body {
 
 */
 
-.posttable { 
+/* .posttable { 
     width : 100%;
     margin: 0px;
-}
+} */
 
 .posttitle {
     text-align: center;
@@ -179,7 +179,7 @@ body {
     flex-wrap: wrap;
 }
 
-.postboy {
+/* .postboy {
     border-bottom-color: rgb(212, 210, 208);
     border-bottom-style: solid;
     border-bottom-width: 1px;
@@ -208,4 +208,35 @@ body {
     width: 410px;
     margin-left: 5px;
     margin-right: 5px;
-    }
+    } */
+
+.posttable {
+    border-bottom-color: rgb(212, 210, 208);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-repeat: stretch;
+    border-left-color: rgb(212, 210, 208);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgb(212, 210, 208);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgb(212, 210, 208);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: none;
+    cursor: pointer;
+    display: block;
+    font-family :"Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 17px;
+    margin-bottom: 12px;
+    margin-top: 1px;
+    position: relative;
+    width: 410px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
