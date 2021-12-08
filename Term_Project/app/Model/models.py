@@ -189,8 +189,6 @@ class Application(db.Model):
     body = db.Column(db.String(1500))
     appStatus = db.Column(db.String(20))
     approved = db.Column(db.Boolean,default = False)
-    post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
     def __repr__(self):
         return '{} - {} - {}'.format(self.id, self.post_id, self.student_id)
 
