@@ -231,6 +231,18 @@ def test_acceptForInterview(broswer, faculty1):
     browser.find_element_by_name("submit").click()
     sleep(3)
 
+def withdrawApplication(browser, student1):
+    #Login
+    browser.get("http://localhost:5000/login")
+    browser.find_element_by_name("username").send_keys(student1['username'])
+    sleep(0.5)
+    browser.find_element_by_name("password").send_keys(student1['password'])
+    sleep(0.5)
+    browser.find_element_by_name("submit").click()
+    sleep(3)
+
+    #Withdrawal
+    browser.find_element_by_xpath("/html/body/div[2]/div/div/input").click()
 
 
 if __name__ == "__main__":
