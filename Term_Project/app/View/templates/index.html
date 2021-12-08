@@ -4,20 +4,22 @@
 
     <h1>Welcome to WSU Research Openings!</h1>
 
+    {%if current_user.userType == "student"%}
     <!-- Recommended Search -->
-    {% if posts %}
+        {% if posts %}
 
-        <form action="" method="post">
-            {{ form.hidden_tag() }}
-            <div class="formselect">
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="formselect">
 
-                Recommended Search: {{form.boolField}}
+                    Recommended Search: {{form.boolField}}
 
-            </div>
-            
-            {{ form.refresh(class="button") }}
+                </div>
+                {{ form.refresh(class="button") }}
 
-        </form>
+            </form>
+
+        {% endif %}
 
     {% endif %}
 

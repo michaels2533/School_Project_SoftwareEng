@@ -231,7 +231,7 @@ def test_acceptForInterview(broswer, faculty1):
     browser.find_element_by_name("submit").click()
     sleep(3)
 
-def withdrawApplication(browser, student1):
+def test_withdrawApplication(browser, student1):
     #Login
     browser.get("http://localhost:5000/login")
     browser.find_element_by_name("username").send_keys(student1['username'])
@@ -243,7 +243,24 @@ def withdrawApplication(browser, student1):
 
     #Withdrawal
     browser.find_element_by_xpath("/html/body/div[2]/div/div/input").click()
+    sleep(1)
 
+def test_deletePost(browser, faculty1):
+    #Login
+    browser.get("http://localhost:5000/login")
+    browser.find_element_by_name("username").send_keys(faculty1['username'])
+    sleep(0.5)
+    browser.find_element_by_name("password").send_keys(faculty1['password'])
+    sleep(0.5)
+    browser.find_element_by_name("submit").click()
+    sleep(3)
+
+    #Delete post
+    browser.find_element_by_xpath("/html/body/div[2]/div/div/table/tbody/tr[2]/td[2]/a").click()
+    sleep(2)
+
+    content = browser.page_source
+    assert "Your Research post has been DELETED!" in content
 
 if __name__ == "__main__":
     retcode = pytest.main()
