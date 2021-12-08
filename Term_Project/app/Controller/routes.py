@@ -221,6 +221,7 @@ def appliedStatus(aid):
     if request.method == 'POST':
         if sform.choice.data == True:
             application = Application.query.filter_by(username = current_user.username)
+            return render_template('applied.html', title = 'Applied Students', applicants = application, form = sform, aform = aform)
         qApp = Application.query.filter_by(id = aid).first() 
         qApp.appStatus = aform.statusfield.data
         db.session.commit()
