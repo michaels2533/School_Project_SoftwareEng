@@ -90,7 +90,7 @@ def createApplication(post_id, student_id):
         #                              email = aform.email.data, body = aform.body.data, username = cPost.facultyUsername)
         newApplication.jobPost = cPost
         newApplication.whoApplied = studentWhoApplied
-        newApplication.writer = current_user; 
+        #newApplication.writer = current_user; 
         #Saves the Application to the database
         db.session.add(newApplication)
         db.session.commit()
@@ -221,6 +221,7 @@ def appliedStatus(aid):
     if request.method == 'POST':
         if sform.choice.data == True:
             application = Application.query.filter_by(username = current_user.username)
+            return render_template('applied.html', title = 'Applied Students', applicants = application, form = sform, aform = aform)
         qApp = Application.query.filter_by(id = aid).first() 
         qApp.appStatus = aform.statusfield.data
         db.session.commit()
@@ -230,7 +231,7 @@ def appliedStatus(aid):
 @bp_routes.route("/applicationStatus/", methods = ['GET', 'POST'])
 @login_required
 def applicationStatus():
-    application = Application.query.filter_by(writer = current_user).all()
+    application = Application.query.filter_by(whoApplied = current_user).all()
     return render_template('application.html', title = 'Open Applications', applicant = application)
 
 #This is for faculty
